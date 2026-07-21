@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP · Skills · Roles — AI Agents em SRE | TCS × Itaú</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy-950:#080d1a;--navy-900:#0c1220;--navy-800:#111a2e;--navy-700:#18253e;
+  --blue-500:#2b7fff;--blue-400:#5594ff;--blue-300:#85b7ff;
+  --teal-500:#00c9a7;--teal-400:#34dab8;
+  --amber-400:#f59e0b;--coral-400:#f97066;--purple-500:#8b5cf6;--purple-400:#a78bfa;--purple-300:#c4b5fd;
+  --green-400:#4ade80;
+  --text-primary:#e8edf5;--text-secondary:#8fa3be;--text-muted:#4d6480;
+  --border:rgba(167,139,250,0.12);--border-strong:rgba(167,139,250,0.28);
+  --radius-sm:6px;--radius-md:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--navy-950);color:var(--text-primary);font-size:16px;line-height:1.7;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(167,139,250,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(167,139,250,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--text-primary);text-decoration:none}
+.nav-logo{width:28px;height:28px;background:linear-gradient(135deg,var(--purple-500),var(--blue-500));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{font-size:13px;color:var(--text-secondary);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a.related{color:var(--blue-400)}
+.nav-badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:rgba(167,139,250,0.12);color:var(--purple-400);border:1px solid rgba(167,139,250,0.25)}
+
+main{position:relative;z-index:1}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 2rem 4rem;text-align:center;position:relative}
+.hero::after{content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(167,139,250,0.09) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--purple-400);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.5rem;padding:5px 14px;border:1px solid rgba(167,139,250,0.28);border-radius:20px;background:rgba(167,139,250,0.06)}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--purple-400);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.4rem,6vw,4.5rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.25rem;max-width:820px}
+.accent-purple{color:var(--purple-400)}
+.accent-blue{color:var(--blue-400)}
+.accent-teal{color:var(--teal-500)}
+.hero-sub{font-size:1.05rem;color:var(--text-secondary);max-width:600px;margin:0 auto 2rem;line-height:1.75}
+.mantra{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-secondary);background:rgba(167,139,250,0.05);border:1px solid var(--border);border-radius:8px;padding:12px 20px;display:inline-block;margin-bottom:2rem}
+.mantra .m-purple{color:var(--purple-400);font-weight:500}
+.mantra .m-blue{color:var(--blue-400);font-weight:500}
+.mantra .m-teal{color:var(--teal-500);font-weight:500}
+
+/* SECTIONS */
+section{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;letter-spacing:-.01em;margin-bottom:.75rem}
+.section-sub{color:var(--text-secondary);max-width:640px;margin-bottom:2.5rem;font-size:.97rem}
+
+/* CONCEPT CARDS */
+.concept-wrap{display:grid;grid-template-columns:1fr;gap:1.5rem}
+.concept-card{background:var(--navy-900);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;position:relative;overflow:hidden}
+.concept-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cc-purple::before{background:linear-gradient(90deg,var(--purple-500),var(--purple-400))}
+.cc-blue::before{background:linear-gradient(90deg,var(--blue-500),var(--blue-400))}
+.cc-teal::before{background:linear-gradient(90deg,var(--teal-500),var(--teal-400))}
+.concept-header{display:flex;align-items:center;gap:16px;margin-bottom:1rem}
+.concept-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.ci-purple{background:rgba(167,139,250,0.12);color:var(--purple-400);border:1px solid rgba(167,139,250,0.25)}
+.ci-blue{background:rgba(43,127,255,0.12);color:var(--blue-400);border:1px solid rgba(43,127,255,0.25)}
+.ci-teal{background:rgba(0,201,167,0.12);color:var(--teal-500);border:1px solid rgba(0,201,167,0.25)}
+.concept-title-block h3{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:600;margin-bottom:2px}
+.concept-title-block .tagline{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)}
+.concept-what{font-size:.95rem;color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.75}
+
+.subsection-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem;margin-top:1.25rem}
+.usecase-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.usecase{background:var(--navy-800);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:.85rem;color:var(--text-secondary);display:flex;align-items:flex-start;gap:8px}
+.usecase-icon{color:var(--purple-400);font-size:11px;flex-shrink:0;margin-top:2px}
+.cc-blue .usecase-icon{color:var(--blue-400)}
+.cc-teal .usecase-icon{color:var(--teal-500)}
+
+/* CODE BLOCKS */
+.code-block{background:#050a15;border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:var(--text-secondary);overflow-x:auto;margin-top:1rem}
+.code-block .k{color:var(--purple-400)}
+.code-block .s{color:var(--teal-400)}
+.code-block .c{color:var(--text-muted);font-style:italic}
+.code-block .n{color:var(--blue-300)}
+.code-header{display:flex;align-items:center;justify-content:space-between;background:var(--navy-800);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em}
+.code-block.attached{border-radius:0 0 8px 8px;border-top:none;margin-top:0}
+.code-lang{color:var(--purple-400)}
+
+/* ROLES TABLE */
+.roles-table{width:100%;border-collapse:collapse;margin-top:1.25rem;background:var(--navy-800);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:.85rem}
+.roles-table thead{background:rgba(0,201,167,0.06)}
+.roles-table th{padding:12px 14px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal-500);letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.roles-table td{padding:11px 14px;color:var(--text-secondary);border-bottom:1px solid var(--border)}
+.roles-table tr:last-child td{border-bottom:none}
+.role-name{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 8px;border-radius:4px;display:inline-block}
+.rn-obs{background:rgba(0,201,167,0.1);color:var(--teal-400)}
+.rn-analyst{background:rgba(43,127,255,0.1);color:var(--blue-400)}
+.rn-op{background:rgba(167,139,250,0.1);color:var(--purple-400)}
+.rn-deploy{background:rgba(245,158,11,0.1);color:var(--amber-400)}
+.rn-prod{background:rgba(249,112,102,0.1);color:var(--coral-400)}
+.env-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted)}
+.approval-yes{color:var(--coral-400);font-size:11px}
+.approval-no{color:var(--teal-500);font-size:11px}
+
+/* ORCHESTRATION DIAGRAM */
+.orch-wrap{background:var(--navy-900);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;margin-top:2rem}
+.orch-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+
+/* INCIDENT SIMULATOR */
+.sim-wrap{background:var(--navy-900);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:1.75rem;margin-top:2rem}
+.sim-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;margin-bottom:.5rem}
+.sim-desc{font-size:.88rem;color:var(--text-secondary);margin-bottom:1.25rem}
+.sim-steps{display:flex;flex-direction:column;gap:0}
+.sim-step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateX(-10px);transition:opacity .4s,transform .4s}
+.sim-step.visible{opacity:1;transform:translateX(0)}
+.sim-step:last-child{border-bottom:none}
+.sim-marker{width:26px;height:26px;border-radius:50%;background:var(--navy-800);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--purple-400);font-weight:500;flex-shrink:0}
+.sim-content{flex:1}
+.sim-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:2px;letter-spacing:.05em;text-transform:uppercase}
+.sim-msg{font-size:.88rem;color:var(--text-primary)}
+.sim-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple-400);margin-top:3px}
+.sim-controls{display:flex;gap:8px;justify-content:center;margin-top:1.25rem}
+.btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 16px;border-radius:6px;border:1px solid;cursor:pointer;transition:all .2s}
+.btn-primary{background:rgba(167,139,250,.12);color:var(--purple-400);border-color:rgba(167,139,250,.35)}
+.btn-primary:hover{background:rgba(167,139,250,.2)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{background:transparent;color:var(--text-secondary);border-color:var(--border)}
+.btn-secondary:hover{color:var(--text-primary);border-color:var(--border-strong)}
+
+/* COMPARISON */
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:1.5rem}
+.comp-col{background:var(--navy-900);padding:1.5rem}
+.comp-header{display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.95rem;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.comp-dot{width:8px;height:8px;border-radius:50%}
+.dot-red{background:var(--coral-400)}
+.dot-green{background:var(--teal-500)}
+.comp-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:.65rem;font-size:.85rem;color:var(--text-secondary)}
+.comp-icon{flex-shrink:0;margin-top:2px;font-size:12px}
+
+/* HARNESS INTEGRATION */
+.harness-block{background:linear-gradient(135deg,rgba(43,127,255,0.06),rgba(167,139,250,0.04));border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:2rem;margin-top:2rem}
+.harness-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:10px}
+.harness-desc{font-size:.9rem;color:var(--text-secondary);margin-bottom:1.5rem}
+.harness-flow{display:grid;grid-template-columns:1fr;gap:12px}
+.harness-step{background:var(--navy-900);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;gap:14px;align-items:center}
+.harness-step-num{width:32px;height:32px;border-radius:50%;background:rgba(43,127,255,.12);color:var(--blue-400);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;flex-shrink:0;border:1px solid rgba(43,127,255,.25)}
+.harness-step-content{flex:1;font-size:.88rem;color:var(--text-secondary)}
+.harness-step-content strong{color:var(--text-primary);font-weight:500}
+.harness-step-content .k{color:var(--purple-400);font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(167,139,250,.08);padding:1px 6px;border-radius:3px}
+
+/* QUOTE */
+.quote-block{background:var(--navy-800);border-left:3px solid var(--purple-400);border-radius:0 var(--radius-md) var(--radius-md) 0;padding:1.25rem 1.5rem;margin:2rem 0;font-style:italic;color:var(--text-secondary);font-size:.95rem}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+footer span{color:var(--text-secondary)}
+footer a{color:var(--blue-400);text-decoration:none}
+footer a:hover{color:var(--blue-300)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:0}
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:640px){
+  nav .nav-links{display:none}
+  .usecase-grid,.comp-grid{grid-template-columns:1fr}
+  .concept-header{flex-direction:column;align-items:flex-start;text-align:left}
+  .roles-table{font-size:.75rem}
+  .roles-table th,.roles-table td{padding:8px 6px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="nav-logo">A</div>
+    AI Agents em SRE
+  </a>
+  <ul class="nav-links">
+    <li><a href="#mcp">MCP</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#roles">Roles</a></li>
+    <li><a href="#orchestration">Orquestração</a></li>
+    <li><a href="#harness">Com Harness</a></li>
+    <li><a href="index.html" class="related">← Harness</a></li>
+  </ul>
+  <div class="nav-badge">TCS × Itaú</div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">AI Agents in Site Reliability Engineering</div>
+  <h1 class="hero-title">
+    <span class="accent-purple">MCP</span> · <span class="accent-blue">Skills</span> · <span class="accent-teal">Roles</span><br>
+    Como agentes de IA<br>
+    entram na esteira SRE
+  </h1>
+  <p class="hero-sub">Três primitivas que transformam um chatbot genérico em um copiloto operacional confiável para ambiente bancário. Sem alucinação. Sem risco. Com auditoria.</p>
+  <div class="mantra">
+    <span class="m-purple">MCP conecta</span> · <span class="m-blue">Skills ensinam</span> · <span class="m-teal">Roles controlam</span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- MCP -->
+<section id="mcp" class="fade-up">
+  <div class="section-eyebrow">Primitiva 1 de 3</div>
+  <h2 class="section-title">MCP — Model Context Protocol</h2>
+  <p class="section-sub">O protocolo aberto criado pela Anthropic em 2024 que padroniza como agentes de IA se conectam a ferramentas externas. Pensa no MCP como o USB-C dos agentes: antes cada integração era customizada; agora existe protocolo comum.</p>
+
+  <div class="concept-card cc-purple">
+    <div class="concept-header">
+      <div class="concept-icon ci-purple">🔌</div>
+      <div class="concept-title-block">
+        <h3>MCP — A camada de integração</h3>
+        <div class="tagline">// standard protocol for agent-to-tool communication</div>
+      </div>
+    </div>
+    <div class="concept-what">
+      Um servidor MCP expõe capacidades (ler arquivo, consultar API, executar comando) que qualquer cliente MCP (Claude Desktop, Claude Code, agentes customizados) consome de forma padronizada. O agente ganha braços — deixa de operar apenas com o que sabe e passa a operar com o que consegue observar em tempo real.
+    </div>
+
+    <div class="subsection-title">Casos de uso em SRE</div>
+    <div class="usecase-grid">
+      <div class="usecase"><span class="usecase-icon">▸</span>Consultar Prometheus/Grafana para métricas em tempo real</div>
+      <div class="usecase"><span class="usecase-icon">▸</span>Listar pods, logs e eventos no Kubernetes</div>
+      <div class="usecase"><span class="usecase-icon">▸</span>Buscar logs no Splunk com queries específicas</div>
+      <div class="usecase"><span class="usecase-icon">▸</span>Revisar PRs e criar issues no GitHub/GitLab</div>
+      <div class="usecase"><span class="usecase-icon">▸</span>Verificar alertas ativos no PagerDuty/Opsgenie</div>
+      <div class="usecase"><span class="usecase-icon">▸</span>Consultar status de deploy no Harness/ArgoCD</div>
+      <div class="usecase"><span class="usecase-icon">▸</span>Abrir chamados no Jira/ServiceNow automaticamente</div>
+      <div class="usecase"><span class="usecase-icon">▸</span>Consultar Datadog para APM e traces</div>
+    </div>
+
+    <div class="subsection-title">Exemplo de configuração MCP</div>
+    <div class="code-header">
+      <span>~/.claude/config.json</span>
+      <span class="code-lang">JSON</span>
+    </div>
+    <div class="code-block attached">
+<span class="c">// Configuração de servidores MCP para SRE bancário</span>
+{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"prometheus"</span>: {
+      <span class="k">"command"</span>: <span class="s">"mcp-server-prometheus"</span>,
+      <span class="k">"env"</span>: { <span class="k">"PROM_URL"</span>: <span class="s">"https://prom.itau.corp"</span> }
+    },
+    <span class="k">"kubernetes"</span>: {
+      <span class="k">"command"</span>: <span class="s">"mcp-server-k8s"</span>,
+      <span class="k">"env"</span>: { <span class="k">"KUBECONFIG"</span>: <span class="s">"/etc/k8s/prod-readonly.yaml"</span> }
+    },
+    <span class="k">"splunk"</span>: {
+      <span class="k">"command"</span>: <span class="s">"mcp-server-splunk"</span>,
+      <span class="k">"env"</span>: { <span class="k">"SPLUNK_TOKEN"</span>: <span class="s">"${SPLUNK_READONLY_TOKEN}"</span> }
+    },
+    <span class="k">"harness"</span>: {
+      <span class="k">"command"</span>: <span class="s">"mcp-server-harness"</span>,
+      <span class="k">"env"</span>: { <span class="k">"HARNESS_API_KEY"</span>: <span class="s">"${HARNESS_READONLY_KEY}"</span> }
+    }
+  }
+}
+    </div>
+
+    <div class="quote-block">
+      "Sem MCP, o agente é um consultor externo que só sabe o que você contou. Com MCP, ele é um SRE júnior que consegue abrir o Grafana, o Splunk e o kubectl ao mesmo tempo — e correlacionar tudo em segundos."
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SKILLS -->
+<section id="skills" class="fade-up">
+  <div class="section-eyebrow">Primitiva 2 de 3</div>
+  <h2 class="section-title">Skills — conhecimento executável</h2>
+  <p class="section-sub">Pacotes de instruções, código e templates que ensinam o agente a executar tarefas específicas seguindo o padrão do time. Uma Skill vira conhecimento operacional reutilizável — o playbook do time codificado em algo que o agente sabe consultar e aplicar.</p>
+
+  <div class="concept-card cc-blue">
+    <div class="concept-header">
+      <div class="concept-icon ci-blue">🎓</div>
+      <div class="concept-title-block">
+        <h3>Skills — Playbooks do time codificados</h3>
+        <div class="tagline">// SKILL.md + scripts + templates + examples</div>
+      </div>
+    </div>
+    <div class="concept-what">
+      Uma Skill agrupa um SKILL.md (instruções em linguagem natural sobre quando e como usar), scripts auxiliares (Python, bash), templates e exemplos. O agente lê a Skill certa na hora certa e passa a executar a tarefa exatamente do jeito que o time faz — nomenclatura, formato de output, ferramentas usadas.
+    </div>
+
+    <div class="subsection-title">Skills típicos em uma operação SRE</div>
+    <div class="usecase-grid">
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>incident-triage</strong>: coleta logs, correlaciona métricas, gera timeline</div>
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>iac-review</strong>: valida Terraform/Helm por padrões do banco</div>
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>postmortem-writer</strong>: gera documento no template do time</div>
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>pre-deploy-check</strong>: valida DORA + coverage + security</div>
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>rca-5-whys</strong>: root cause analysis estruturada</div>
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>k8s-troubleshoot</strong>: diagnóstico de pod/deployment/service</div>
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>slo-report</strong>: gera relatório mensal de SLO</div>
+      <div class="usecase"><span class="usecase-icon">▸</span><strong>runbook-executor</strong>: executa runbook aprovado com aprovação</div>
+    </div>
+
+    <div class="subsection-title">Estrutura de uma Skill de exemplo</div>
+    <div class="code-header">
+      <span>skills/itau-incident-triage/SKILL.md</span>
+      <span class="code-lang">MARKDOWN</span>
+    </div>
+    <div class="code-block attached">
+<span class="c">---</span>
+<span class="k">name</span>: itau-incident-triage
+<span class="k">description</span>: Triagem inicial de incidente P1/P2 seguindo padrão Itaú
+<span class="k">trigger</span>: alerta PagerDuty severity=high OR palavra "incidente" no chat
+<span class="c">---</span>
+
+<span class="n"># Skill: Itaú Incident Triage</span>
+
+<span class="n">## Quando usar</span>
+Sempre que chegar alerta P1/P2 do PagerDuty ou pedido explícito
+de triagem de incidente em produção.
+
+<span class="n">## Passos obrigatórios</span>
+1. Consultar Splunk com query padrão do serviço afetado
+2. Consultar Datadog: latência p99, error rate, throughput
+3. Consultar Harness: último deploy nas últimas 4h
+4. Consultar Kubernetes: pods do serviço + eventos recentes
+5. Correlacionar timestamps: alerta ↔ deploy ↔ anomalia
+
+<span class="n">## Output esperado</span>
+- Timeline de eventos em formato Markdown
+- Hipótese principal de root cause
+- Ações recomendadas (nunca executar sem aprovação)
+- Chamado no ServiceNow com template ITAU-INC-P1
+
+<span class="n">## Ferramentas MCP necessárias</span>
+splunk · datadog · harness · kubernetes · servicenow
+
+<span class="n">## Restrições</span>
+- NUNCA executar rollback sem aprovação humana
+- NUNCA acessar dados PII/financeiros nos logs
+- SEMPRE registrar todas as consultas no audit log
+    </div>
+
+    <div class="quote-block">
+      "Skills transformam conhecimento tribal em conhecimento operacional. O runbook que só o Zé sabia agora vira algo que qualquer agente executa exatamente do jeito certo, na 3h da manhã, sem depender do Zé estar acordado."
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ROLES -->
+<section id="roles" class="fade-up">
+  <div class="section-eyebrow">Primitiva 3 de 3</div>
+  <h2 class="section-title">Roles — governança e permissão</h2>
+  <p class="section-sub">Configuração de permissões e responsabilidades do agente. Define o que ele pode fazer, em qual ambiente, com qual nível de autonomia. Em ambiente regulado (banco, BACEN, LGPD), Roles são o que viabiliza usar agente com segurança — não é opcional.</p>
+
+  <div class="concept-card cc-teal">
+    <div class="concept-header">
+      <div class="concept-icon ci-teal">🛡️</div>
+      <div class="concept-title-block">
+        <h3>Roles — Guardrails de autonomia</h3>
+        <div class="tagline">// least-privilege access control for AI agents</div>
+      </div>
+    </div>
+    <div class="concept-what">
+      Uma Role define o escopo de ação do agente: quais Skills pode invocar, quais servidores MCP pode consultar, em qual ambiente pode operar e quando precisa de aprovação humana. É o mesmo princípio de least-privilege que aplicamos a service accounts — só que agora para agentes de IA.
+    </div>
+
+    <div class="subsection-title">Matriz de Roles em SRE bancário</div>
+    <table class="roles-table">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Ambiente</th>
+          <th>Ações permitidas</th>
+          <th>Aprovação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="role-name rn-obs">observer</span></td>
+          <td><span class="env-tag">prod</span></td>
+          <td>Ler logs, métricas, status</td>
+          <td><span class="approval-no">✓ Não</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-name rn-analyst">analyst</span></td>
+          <td><span class="env-tag">prod</span></td>
+          <td>Ler + gerar relatórios, RCAs</td>
+          <td><span class="approval-no">✓ Não</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-name rn-op">operator</span></td>
+          <td><span class="env-tag">homolog</span></td>
+          <td>Ler + executar runbooks</td>
+          <td><span class="approval-no">✓ Não</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-name rn-deploy">deployer</span></td>
+          <td><span class="env-tag">homolog</span></td>
+          <td>Deploy + rollback</td>
+          <td><span class="approval-no">✓ Não</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-name rn-prod">prod-operator</span></td>
+          <td><span class="env-tag">prod</span></td>
+          <td>Ler + executar runbooks aprovados</td>
+          <td><span class="approval-yes">⚠ Sim, por ação</span></td>
+        </tr>
+        <tr>
+          <td><span class="role-name rn-prod">prod-deployer</span></td>
+          <td><span class="env-tag">prod</span></td>
+          <td>Deploy + rollback em prod</td>
+          <td><span class="approval-yes">⚠ Mandatória</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="subsection-title">Configuração de Role em código</div>
+    <div class="code-header">
+      <span>roles/prod-analyst.yaml</span>
+      <span class="code-lang">YAML</span>
+    </div>
+    <div class="code-block attached">
+<span class="k">apiVersion</span>: <span class="s">agent.itau.corp/v1</span>
+<span class="k">kind</span>: <span class="s">AgentRole</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="s">prod-analyst</span>
+<span class="k">spec</span>:
+  <span class="k">environment</span>: <span class="s">production</span>
+  <span class="k">mcpServers</span>:
+    - <span class="s">prometheus</span>       <span class="c"># read-only</span>
+    - <span class="s">datadog</span>          <span class="c"># read-only</span>
+    - <span class="s">splunk</span>           <span class="c"># read-only</span>
+    - <span class="s">harness-readonly</span> <span class="c"># read-only</span>
+    - <span class="s">kubernetes-ro</span>    <span class="c"># read-only, no exec</span>
+  <span class="k">allowedSkills</span>:
+    - <span class="s">itau-incident-triage</span>
+    - <span class="s">rca-5-whys</span>
+    - <span class="s">postmortem-writer</span>
+    - <span class="s">slo-report</span>
+  <span class="k">forbiddenActions</span>:
+    - <span class="s">deploy</span>
+    - <span class="s">rollback</span>
+    - <span class="s">delete</span>
+    - <span class="s">access-pii</span>
+  <span class="k">requiresApproval</span>: <span class="s">false</span>  <span class="c"># read-only, sem risco</span>
+  <span class="k">auditLog</span>: <span class="s">mandatory</span>       <span class="c"># toda ação registrada</span>
+    </div>
+
+    <div class="quote-block">
+      "Role é o cinto de segurança. Sem ele, o agente vira um estagiário com acesso root em produção — perigoso demais para ambiente regulado. Com ele, o agente vira um profissional com escopo claro e supervisão adequada."
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ORCHESTRATION -->
+<section id="orchestration" class="fade-up">
+  <div class="section-eyebrow">Integração</div>
+  <h2 class="section-title">Como os três se orquestram</h2>
+  <p class="section-sub">Na prática, MCP, Skills e Roles trabalham juntos como camadas complementares. Um alerta P1 dispara uma cadeia orquestrada que envolve os três.</p>
+
+  <div class="orch-wrap">
+    <div class="orch-title">🎯 Fluxo completo — alerta P1 até resolução</div>
+
+    <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+      <defs>
+        <marker id="arrDown" markerWidth="8" markerHeight="8" refX="4" refY="6" orient="auto">
+          <path d="M0,0 L8,0 L4,6 Z" fill="rgba(167,139,250,0.5)"/>
+        </marker>
+        <marker id="arrGreen" markerWidth="8" markerHeight="8" refX="4" refY="6" orient="auto">
+          <path d="M0,0 L8,0 L4,6 Z" fill="rgba(0,201,167,0.6)"/>
+        </marker>
+      </defs>
+
+      <!-- Alert P1 -->
+      <rect x="240" y="10" width="200" height="46" rx="8" fill="rgba(249,112,102,0.08)" stroke="rgba(249,112,102,0.4)" stroke-width="1.5"/>
+      <text x="340" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#f97066">⚠ INCIDENT</text>
+      <text x="340" y="47" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="600" fill="#e8edf5">Alerta P1 no PagerDuty</text>
+
+      <line x1="340" y1="56" x2="340" y2="78" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" marker-end="url(#arrDown)"/>
+
+      <!-- Role Check -->
+      <rect x="200" y="82" width="280" height="52" rx="8" fill="#111a2e" stroke="rgba(0,201,167,0.4)" stroke-width="1.5"/>
+      <text x="340" y="102" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#00c9a7">🛡 ROLE ATIVA</text>
+      <text x="340" y="120" text-anchor="middle" font-family="Space Grotesk" font-size="12" font-weight="600" fill="#e8edf5">prod-analyst (read-only, sem approval)</text>
+
+      <line x1="340" y1="134" x2="340" y2="156" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" marker-end="url(#arrDown)"/>
+
+      <!-- Skill Loaded -->
+      <rect x="200" y="160" width="280" height="52" rx="8" fill="#111a2e" stroke="rgba(43,127,255,0.4)" stroke-width="1.5"/>
+      <text x="340" y="180" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#5594ff">🎓 SKILL CARREGADA</text>
+      <text x="340" y="198" text-anchor="middle" font-family="Space Grotesk" font-size="12" font-weight="600" fill="#e8edf5">itau-incident-triage</text>
+
+      <line x1="340" y1="212" x2="340" y2="234" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" marker-end="url(#arrDown)"/>
+
+      <!-- MCP Fan Out -->
+      <text x="340" y="252" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#a78bfa">🔌 MCP — CONSULTA PARALELA</text>
+
+      <rect x="30" y="264" width="120" height="42" rx="6" fill="#111a2e" stroke="rgba(167,139,250,0.3)"/>
+      <text x="90" y="282" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="600" fill="#e8edf5">Splunk</text>
+      <text x="90" y="296" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#4d6480">logs</text>
+
+      <rect x="164" y="264" width="120" height="42" rx="6" fill="#111a2e" stroke="rgba(167,139,250,0.3)"/>
+      <text x="224" y="282" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="600" fill="#e8edf5">Datadog</text>
+      <text x="224" y="296" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#4d6480">métricas</text>
+
+      <rect x="298" y="264" width="120" height="42" rx="6" fill="#111a2e" stroke="rgba(167,139,250,0.3)"/>
+      <text x="358" y="282" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="600" fill="#e8edf5">Harness</text>
+      <text x="358" y="296" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#4d6480">último deploy</text>
+
+      <rect x="432" y="264" width="120" height="42" rx="6" fill="#111a2e" stroke="rgba(167,139,250,0.3)"/>
+      <text x="492" y="282" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="600" fill="#e8edf5">Kubernetes</text>
+      <text x="492" y="296" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#4d6480">pods + events</text>
+
+      <line x1="90" y1="306" x2="90" y2="330" stroke="rgba(167,139,250,0.4)" stroke-width="1" marker-end="url(#arrDown)"/>
+      <line x1="224" y1="306" x2="224" y2="330" stroke="rgba(167,139,250,0.4)" stroke-width="1" marker-end="url(#arrDown)"/>
+      <line x1="358" y1="306" x2="358" y2="330" stroke="rgba(167,139,250,0.4)" stroke-width="1" marker-end="url(#arrDown)"/>
+      <line x1="492" y1="306" x2="492" y2="330" stroke="rgba(167,139,250,0.4)" stroke-width="1" marker-end="url(#arrDown)"/>
+
+      <!-- Output -->
+      <rect x="200" y="334" width="280" height="52" rx="8" fill="rgba(0,201,167,0.07)" stroke="rgba(0,201,167,0.4)" stroke-width="1.5"/>
+      <text x="340" y="354" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#00c9a7">✓ OUTPUT</text>
+      <text x="340" y="372" text-anchor="middle" font-family="Space Grotesk" font-size="12" font-weight="600" fill="#34dab8">Timeline + RCA + sugestão de ação</text>
+
+      <!-- Handoff arrow -->
+      <line x1="340" y1="386" x2="340" y2="404" stroke="rgba(0,201,167,0.5)" stroke-width="1.5" marker-end="url(#arrGreen)"/>
+      <text x="340" y="418" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8fa3be">→ SRE humano decide próxima ação</text>
+    </svg>
+  </div>
+
+  <!-- INCIDENT SIMULATOR -->
+  <div class="sim-wrap">
+    <div class="sim-title">🎬 Simulação: incidente P1 em tempo real</div>
+    <div class="sim-desc">Clica em executar para ver o agente percorrer o fluxo completo — Role → Skill → MCP → Output.</div>
+    <div class="sim-steps" id="sim-steps">
+      <div class="sim-step" data-step="0">
+        <div class="sim-marker">1</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:07 — ALERTA</div>
+          <div class="sim-msg">PagerDuty dispara P1: <code>payment-service latency p99 &gt; 3s</code></div>
+          <div class="sim-meta">→ Agente notificado via webhook</div>
+        </div>
+      </div>
+      <div class="sim-step" data-step="1">
+        <div class="sim-marker">2</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:08 — ROLE</div>
+          <div class="sim-msg">Sistema valida contexto: <strong>prod-analyst</strong> (read-only)</div>
+          <div class="sim-meta">→ Sem aprovação necessária para triagem</div>
+        </div>
+      </div>
+      <div class="sim-step" data-step="2">
+        <div class="sim-marker">3</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:09 — SKILL</div>
+          <div class="sim-msg">Carrega <strong>itau-incident-triage</strong> — playbook de triagem P1</div>
+          <div class="sim-meta">→ SKILL.md + scripts + templates carregados</div>
+        </div>
+      </div>
+      <div class="sim-step" data-step="3">
+        <div class="sim-marker">4</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:11 — MCP · Splunk</div>
+          <div class="sim-msg">Query <code>index=payment error last 15min</code> → 847 eventos</div>
+          <div class="sim-meta">→ Padrão detectado: NullPointerException em processPayment()</div>
+        </div>
+      </div>
+      <div class="sim-step" data-step="4">
+        <div class="sim-marker">5</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:12 — MCP · Datadog</div>
+          <div class="sim-msg">Latência p99 = 4.2s (baseline 145ms) · Error rate = 3.8%</div>
+          <div class="sim-meta">→ Confirmação de degradação severa</div>
+        </div>
+      </div>
+      <div class="sim-step" data-step="5">
+        <div class="sim-marker">6</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:13 — MCP · Harness</div>
+          <div class="sim-msg">Último deploy: <code>v2.14.3</code> às 14:18 (14min antes do alerta)</div>
+          <div class="sim-meta">→ Correlação temporal forte com incidente</div>
+        </div>
+      </div>
+      <div class="sim-step" data-step="6">
+        <div class="sim-marker">7</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:14 — MCP · Kubernetes</div>
+          <div class="sim-msg">3/6 pods em CrashLoopBackOff · restart count crescendo</div>
+          <div class="sim-meta">→ Serviço parcialmente indisponível</div>
+        </div>
+      </div>
+      <div class="sim-step" data-step="7">
+        <div class="sim-marker">8</div>
+        <div class="sim-content">
+          <div class="sim-label">14:32:16 — OUTPUT</div>
+          <div class="sim-msg">Agente entrega ao SRE humano: timeline + RCA + sugestão</div>
+          <div class="sim-meta" style="color:var(--teal-500)">✓ Sugestão: rollback para v2.14.2 · aguardando aprovação humana</div>
+        </div>
+      </div>
+    </div>
+    <div class="sim-controls">
+      <button class="btn btn-primary" id="btn-sim" onclick="runSim()">▶ Executar simulação</button>
+      <button class="btn btn-secondary" onclick="resetSim()">↺ Resetar</button>
+    </div>
+  </div>
+
+  <!-- COMPARISON -->
+  <div style="margin-top:2rem">
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;margin-bottom:1rem;color:var(--text-secondary)">Sem os três primitivos vs. com os três primitivos</h3>
+    <div class="comp-grid">
+      <div class="comp-col">
+        <div class="comp-header"><div class="comp-dot dot-red"></div>Agente genérico (sem MCP/Skills/Roles)</div>
+        <div class="comp-item"><span class="comp-icon">❌</span>Só sabe o que foi contado no chat</div>
+        <div class="comp-item"><span class="comp-icon">❌</span>Sem acesso a métricas ou logs reais</div>
+        <div class="comp-item"><span class="comp-icon">❌</span>Sem padrão de execução — respostas divergem por conversa</div>
+        <div class="comp-item"><span class="comp-icon">❌</span>Sem controle de permissão — risco em ambiente regulado</div>
+        <div class="comp-item"><span class="comp-icon">❌</span>Alucina dados de sistema por falta de fonte real</div>
+        <div class="comp-item"><span class="comp-icon">❌</span>Não deixa audit trail rastreável</div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-header"><div class="comp-dot dot-green"></div>Agente operacional (MCP + Skills + Roles)</div>
+        <div class="comp-item"><span class="comp-icon">✅</span>Consulta Splunk, Datadog, K8s, Harness em tempo real</div>
+        <div class="comp-item"><span class="comp-icon">✅</span>Segue padrão do time em toda execução</div>
+        <div class="comp-item"><span class="comp-icon">✅</span>Escopo controlado por Role — least-privilege</div>
+        <div class="comp-item"><span class="comp-icon">✅</span>Zero alucinação — sempre com dado de fonte real</div>
+        <div class="comp-item"><span class="comp-icon">✅</span>Audit log completo de toda ação</div>
+        <div class="comp-item"><span class="comp-icon">✅</span>Aprovação humana onde regulação exige</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HARNESS INTEGRATION -->
+<section id="harness" class="fade-up">
+  <div class="section-eyebrow">Sinergia</div>
+  <h2 class="section-title">Integração com a esteira Harness</h2>
+  <p class="section-sub">MCP + Skills + Roles não substituem o Harness — trabalham em cima dele. O agente vira uma camada de inteligência que consulta, analisa e sugere ações que a plataforma executa.</p>
+
+  <div class="harness-block">
+    <div class="harness-title">🔗 Como o agente se integra ao pipeline Harness</div>
+    <div class="harness-desc">Uma pipeline típica no Harness passa a ser observada, analisada e complementada por agentes com Skills específicos para cada estágio.</div>
+
+    <div class="harness-flow">
+      <div class="harness-step">
+        <div class="harness-step-num">1</div>
+        <div class="harness-step-content">
+          <strong>Pre-commit — Code review de IaC</strong><br>
+          Role <span class="k">iac-reviewer</span> · Skill <span class="k">terraform-review</span> · MCP <span class="k">github</span> analisa PR de infra antes do merge, valida padrões do banco e comenta no PR automaticamente.
+        </div>
+      </div>
+      <div class="harness-step">
+        <div class="harness-step-num">2</div>
+        <div class="harness-step-content">
+          <strong>Build — Análise de teste</strong><br>
+          Role <span class="k">ci-analyst</span> · Skill <span class="k">test-failure-diagnosis</span> · MCP <span class="k">harness</span> ao quebrar um teste, o agente lê o log, correlaciona com commits recentes e sugere o fix.
+        </div>
+      </div>
+      <div class="harness-step">
+        <div class="harness-step-num">3</div>
+        <div class="harness-step-content">
+          <strong>Deploy — Verificação assistida</strong><br>
+          Role <span class="k">deploy-analyst</span> · Skill <span class="k">canary-verification</span> · MCP <span class="k">prometheus + datadog</span> complementa o CV nativo do Harness com análise contextual profunda.
+        </div>
+      </div>
+      <div class="harness-step">
+        <div class="harness-step-num">4</div>
+        <div class="harness-step-content">
+          <strong>Post-deploy — Health check inteligente</strong><br>
+          Role <span class="k">prod-analyst</span> · Skill <span class="k">post-deploy-check</span> · MCP <span class="k">splunk + k8s + datadog</span> monitora as primeiras 2h pós-deploy e alerta sobre padrões anômalos que o CV não pega.
+        </div>
+      </div>
+      <div class="harness-step">
+        <div class="harness-step-num">5</div>
+        <div class="harness-step-content">
+          <strong>Incidente — Triagem automática</strong><br>
+          Role <span class="k">prod-analyst</span> · Skill <span class="k">itau-incident-triage</span> · MCP <span class="k">splunk + datadog + harness + k8s</span> quando o CV do Harness detecta anomalia e faz rollback, o agente já entrega o RCA pronto para o SRE.
+        </div>
+      </div>
+      <div class="harness-step">
+        <div class="harness-step-num">6</div>
+        <div class="harness-step-content">
+          <strong>Postmortem — Documentação automática</strong><br>
+          Role <span class="k">analyst</span> · Skill <span class="k">postmortem-writer</span> · MCP <span class="k">harness + jira</span> após incidente resolvido, o agente compila timeline, ações tomadas e recomendações no template do time.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "A esteira Harness cuida da execução com governança. O agente com MCP + Skills + Roles cuida da inteligência contextual. Juntos, formam um sistema onde a máquina executa o que é seguro e o humano decide o que é sensível — com contexto pronto na mão."
+  </div>
+</section>
+
+<hr class="divider">
+
+</main>
+
+<footer>
+  <span>MCP · Skills · Roles — AI Agents em SRE</span> · TCS × Itaú · Complemento ao <a href="index.html">Harness Platform</a>
+</footer>
+
+<script>
+// ---- FADE IN ----
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)} });
+},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+
+// ---- INCIDENT SIMULATOR ----
+let simRunning=false;
+let simTimeouts=[];
+
+function resetSim(){
+  simTimeouts.forEach(t=>clearTimeout(t));
+  simTimeouts=[];
+  simRunning=false;
+  document.querySelectorAll('.sim-step').forEach(s=>s.classList.remove('visible'));
+  document.getElementById('btn-sim').disabled=false;
+}
+
+function runSim(){
+  if(simRunning)return;
+  resetSim();
+  simRunning=true;
+  document.getElementById('btn-sim').disabled=true;
+  const steps=document.querySelectorAll('.sim-step');
+  steps.forEach((step,i)=>{
+    simTimeouts.push(setTimeout(()=>{
+      step.classList.add('visible');
+      if(i===steps.length-1){
+        simRunning=false;
+        setTimeout(()=>{document.getElementById('btn-sim').disabled=false},500);
+      }
+    },i*900));
+  });
+}
+</script>
+</body>
+</html>
