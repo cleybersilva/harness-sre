@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRE Lab — Simuladores Interativos | TCS × Itaú</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy-950:#080d1a;--navy-900:#0c1220;--navy-800:#111a2e;--navy-700:#18253e;
+  --blue-500:#2b7fff;--blue-400:#5594ff;--blue-300:#85b7ff;
+  --teal-500:#00c9a7;--teal-400:#34dab8;
+  --lime-400:#a3e635;--lime-500:#84cc16;
+  --amber-400:#f59e0b;--coral-400:#f97066;--purple-400:#a78bfa;--green-400:#4ade80;
+  --text-primary:#e8edf5;--text-secondary:#8fa3be;--text-muted:#4d6480;
+  --border:rgba(163,230,53,0.14);--border-strong:rgba(163,230,53,0.3);
+  --radius-sm:6px;--radius-md:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--navy-950);color:var(--text-primary);font-size:16px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(163,230,53,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(163,230,53,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--text-primary);text-decoration:none}
+.nav-logo{width:28px;height:28px;background:linear-gradient(135deg,var(--lime-400),var(--teal-500));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--navy-950)}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{font-size:13px;color:var(--text-secondary);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a.related-blue{color:var(--blue-400)}
+.nav-links a.related-purple{color:var(--purple-400)}
+.nav-badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:rgba(163,230,53,0.12);color:var(--lime-400);border:1px solid rgba(163,230,53,0.28)}
+
+main{position:relative;z-index:1;padding-top:56px}
+
+/* HERO */
+.hero{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;text-align:center;position:relative}
+.hero::after{content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(163,230,53,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--lime-400);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.5rem;padding:5px 14px;border:1px solid rgba(163,230,53,0.3);border-radius:20px;background:rgba(163,230,53,0.06)}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--lime-400);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.4rem,6vw,4.5rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.25rem;max-width:820px}
+.accent-lime{color:var(--lime-400)}
+.hero-sub{font-size:1.05rem;color:var(--text-secondary);max-width:600px;margin:0 auto 2rem;line-height:1.75}
+.lab-menu{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:720px}
+.lab-menu a{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 14px;border-radius:20px;background:rgba(163,230,53,.06);color:var(--lime-400);border:1px solid rgba(163,230,53,.25);text-decoration:none;transition:all .2s}
+.lab-menu a:hover{background:rgba(163,230,53,.15);border-color:var(--lime-400)}
+
+/* SECTIONS */
+section{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.lab-header{display:flex;align-items:center;gap:12px;margin-bottom:.75rem}
+.lab-num{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(163,230,53,.1);color:var(--lime-400);border:1px solid rgba(163,230,53,.28);letter-spacing:.05em}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;letter-spacing:-.01em;margin-bottom:.5rem}
+.section-sub{color:var(--text-secondary);max-width:640px;margin-bottom:2rem;font-size:.97rem;line-height:1.75}
+
+/* LAB CARDS */
+.lab-card{background:var(--navy-900);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem;position:relative;overflow:hidden}
+
+/* Common Controls */
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.btn{font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 16px;border-radius:6px;border:1px solid;cursor:pointer;transition:all .2s;background:transparent}
+.btn-primary{background:rgba(163,230,53,.12);color:var(--lime-400);border-color:rgba(163,230,53,.4)}
+.btn-primary:hover{background:rgba(163,230,53,.2)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-warn{background:rgba(245,158,11,.1);color:var(--amber-400);border-color:rgba(245,158,11,.35)}
+.btn-warn:hover{background:rgba(245,158,11,.18)}
+.btn-danger{background:rgba(249,112,102,.1);color:var(--coral-400);border-color:rgba(249,112,102,.35)}
+.btn-danger:hover{background:rgba(249,112,102,.18)}
+.btn-secondary{color:var(--text-secondary);border-color:var(--border)}
+.btn-secondary:hover{color:var(--text-primary);border-color:var(--border-strong)}
+.btn-active{background:var(--lime-400);color:var(--navy-950);border-color:var(--lime-400)}
+
+/* ============================================================
+   LAB 1 — CONTINUOUS VERIFICATION
+   ============================================================ */
+.cv-lab{display:grid;grid-template-columns:1fr 320px;gap:1rem}
+.cv-canvas-wrap{background:#050a15;border:1px solid var(--border);border-radius:10px;padding:14px;position:relative}
+.cv-canvas-title{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);margin-bottom:10px}
+.cv-status{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500}
+.cv-status-idle{background:rgba(143,163,190,.1);color:var(--text-secondary);border:1px solid rgba(143,163,190,.25)}
+.cv-status-monitoring{background:rgba(43,127,255,.1);color:var(--blue-400);border:1px solid rgba(43,127,255,.3)}
+.cv-status-anomaly{background:rgba(245,158,11,.1);color:var(--amber-400);border:1px solid rgba(245,158,11,.3)}
+.cv-status-rollback{background:rgba(249,112,102,.12);color:var(--coral-400);border:1px solid rgba(249,112,102,.35)}
+.cv-status-healthy{background:rgba(163,230,53,.1);color:var(--lime-400);border:1px solid rgba(163,230,53,.3)}
+#cv-canvas{width:100%;height:280px;display:block}
+.cv-legend{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.cv-legend-item{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted)}
+.cv-legend-dot{width:8px;height:8px;border-radius:2px}
+.cv-side{display:flex;flex-direction:column;gap:10px}
+.cv-metric-box{background:var(--navy-800);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.cv-metric-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.cv-metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text-primary);line-height:1}
+.cv-metric-baseline{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:3px}
+.cv-log{background:#050a15;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.8;max-height:130px;overflow-y:auto;color:var(--text-secondary)}
+.cv-log-line{display:block}
+.cv-l-info{color:var(--blue-400)}
+.cv-l-ok{color:var(--lime-400)}
+.cv-l-warn{color:var(--amber-400)}
+.cv-l-err{color:var(--coral-400)}
+
+/* ============================================================
+   LAB 2 — DORA DASHBOARD
+   ============================================================ */
+.dora-dash{display:grid;grid-template-columns:1fr;gap:1rem}
+.dora-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.dora-num-card{background:var(--navy-800);border:1px solid var(--border);border-radius:10px;padding:1rem;position:relative;overflow:hidden}
+.dora-num-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.dnc-1::before{background:var(--blue-400)}.dnc-2::before{background:var(--purple-400)}.dnc-3::before{background:var(--teal-500)}.dnc-4::before{background:var(--amber-400)}
+.dora-num-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.dora-num-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;line-height:1;margin-bottom:4px}
+.dora-num-unit{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-secondary)}
+.dora-num-tier{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;display:inline-block}
+.tier-elite{background:rgba(163,230,53,.15);color:var(--lime-400)}
+.tier-high{background:rgba(43,127,255,.15);color:var(--blue-400)}
+.tier-med{background:rgba(245,158,11,.15);color:var(--amber-400)}
+.tier-low{background:rgba(249,112,102,.15);color:var(--coral-400)}
+.dora-timeline-wrap{background:#050a15;border:1px solid var(--border);border-radius:10px;padding:14px}
+.dora-timeline-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);margin-bottom:8px;display:flex;justify-content:space-between}
+#dora-timeline{width:100%;height:120px;display:block}
+.dora-sliders{display:grid;grid-template-columns:1fr 1fr;gap:1rem;background:var(--navy-800);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.slider-field label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.slider-field input[type=range]{width:100%;accent-color:var(--lime-400);cursor:pointer}
+.slider-field .val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--lime-400);margin-top:4px}
+
+/* ============================================================
+   LAB 3 — KUBERNETES CHAOS
+   ============================================================ */
+.chaos-lab{display:grid;grid-template-columns:1fr 300px;gap:1rem}
+.chaos-cluster{background:#050a15;border:1px solid var(--border);border-radius:10px;padding:1.25rem;position:relative;min-height:340px}
+.chaos-cluster-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px dashed var(--border)}
+.cluster-name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)}
+.cluster-name strong{color:var(--lime-400)}
+.availability{display:flex;align-items:center;gap:8px}
+.avail-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted)}
+.avail-val{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:var(--lime-400);transition:color .3s}
+.pod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:12px}
+.pod{aspect-ratio:1;background:var(--navy-800);border:1.5px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;position:relative;padding:8px}
+.pod:hover{border-color:var(--border-strong);transform:scale(1.03)}
+.pod-icon{font-size:1.5rem;margin-bottom:6px;transition:all .3s}
+.pod-name{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);text-align:center;line-height:1.2}
+.pod-status{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;transition:all .3s}
+.pod.running{border-color:rgba(163,230,53,.4);background:rgba(163,230,53,.04)}
+.pod.running .pod-status{background:var(--lime-400);box-shadow:0 0 6px rgba(163,230,53,.5)}
+.pod.starting{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.05)}
+.pod.starting .pod-status{background:var(--amber-400);animation:blinkFast 0.6s infinite}
+.pod.dead{border-color:rgba(249,112,102,.4);background:rgba(249,112,102,.05);opacity:.5}
+.pod.dead .pod-status{background:var(--coral-400)}
+.pod.dead .pod-icon{filter:grayscale(1)}
+@keyframes blinkFast{0%,100%{opacity:1}50%{opacity:.3}}
+.chaos-side{display:flex;flex-direction:column;gap:10px}
+.chaos-metric{background:var(--navy-800);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.chaos-metric-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase}
+.chaos-metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700}
+.chaos-log{background:#050a15;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.8;max-height:120px;overflow-y:auto;color:var(--text-secondary)}
+.replicas-control{background:var(--navy-800);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+
+/* ============================================================
+   LAB 4 — ROLE BUILDER
+   ============================================================ */
+.role-lab{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.role-builder{background:var(--navy-800);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.role-section{margin-bottom:1.25rem}
+.role-section:last-child{margin-bottom:0}
+.role-section-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.env-toggle{display:flex;gap:6px;margin-bottom:8px}
+.env-btn{flex:1;font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;transition:all .2s}
+.env-btn.active{background:rgba(163,230,53,.12);color:var(--lime-400);border-color:var(--lime-400)}
+.perm-list{display:flex;flex-direction:column;gap:6px}
+.perm-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--navy-900);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .2s}
+.perm-item:hover{border-color:var(--border-strong)}
+.perm-item input[type=checkbox]{accent-color:var(--lime-400);cursor:pointer;width:14px;height:14px}
+.perm-label{flex:1;font-size:.82rem;color:var(--text-secondary)}
+.perm-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(43,127,255,.1);color:var(--blue-400)}
+.perm-tag.danger{background:rgba(249,112,102,.1);color:var(--coral-400)}
+.perm-tag.warn{background:rgba(245,158,11,.1);color:var(--amber-400)}
+.role-output{display:flex;flex-direction:column;gap:12px}
+.security-score{background:var(--navy-800);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+.score-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.score-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase}
+.score-val{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;transition:color .3s}
+.score-bar{height:6px;background:var(--navy-900);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.score-fill{height:100%;transition:width .4s,background .4s}
+.score-msg{font-size:.78rem;color:var(--text-secondary);font-style:italic}
+.yaml-output{background:#050a15;border:1px solid var(--border);border-radius:10px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;color:var(--text-secondary);overflow-x:auto;flex:1}
+.yaml-output .k{color:var(--lime-400)}
+.yaml-output .s{color:var(--teal-400)}
+.yaml-output .c{color:var(--text-muted);font-style:italic}
+.yaml-header{display:flex;justify-content:space-between;align-items:center;background:var(--navy-800);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase}
+
+/* ============================================================
+   LAB 5 — AGENT CHAT
+   ============================================================ */
+.agent-chat{background:#050a15;border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;height:520px}
+.chat-header{background:var(--navy-800);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chat-title{display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.9rem}
+.chat-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--lime-400),var(--teal-500));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy-950)}
+.chat-status{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--lime-400);display:flex;align-items:center;gap:4px}
+.chat-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--lime-400);animation:pulse 2s infinite}
+.chat-body{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:85%;font-size:.85rem;line-height:1.6;animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg-user{align-self:flex-end;background:rgba(43,127,255,.12);color:var(--blue-300);padding:8px 14px;border-radius:12px 12px 2px 12px;border:1px solid rgba(43,127,255,.25)}
+.msg-agent{align-self:flex-start;background:var(--navy-800);color:var(--text-primary);padding:10px 14px;border-radius:12px 12px 12px 2px;border:1px solid var(--border);width:auto;max-width:95%}
+.msg-meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);margin-top:6px;padding-top:6px;border-top:1px dashed var(--border);display:flex;gap:8px;flex-wrap:wrap}
+.meta-tag{padding:2px 6px;border-radius:3px}
+.mt-mcp{background:rgba(167,139,250,.1);color:var(--purple-400)}
+.mt-skill{background:rgba(43,127,255,.1);color:var(--blue-400)}
+.mt-role{background:rgba(0,201,167,.1);color:var(--teal-500)}
+.msg-thinking{align-self:flex-start;font-style:italic;color:var(--text-muted);font-size:.8rem;padding:6px 10px}
+.msg-thinking::before{content:'●●●';color:var(--lime-400);letter-spacing:2px;animation:think 1.4s infinite}
+@keyframes think{0%,100%{opacity:.3}50%{opacity:1}}
+.chat-input{background:var(--navy-800);padding:12px 16px;border-top:1px solid var(--border)}
+.chat-suggestions{display:flex;gap:6px;flex-wrap:wrap}
+.chat-sug{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 12px;border-radius:16px;background:rgba(163,230,53,.08);color:var(--lime-400);border:1px solid rgba(163,230,53,.25);cursor:pointer;transition:all .2s}
+.chat-sug:hover:not(:disabled){background:rgba(163,230,53,.18)}
+.chat-sug:disabled{opacity:.3;cursor:not-allowed}
+.chat-code{background:#050a15;border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--lime-400);display:block;margin:6px 0;overflow-x:auto}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-top:3rem}
+footer span{color:var(--text-secondary)}
+footer a{color:var(--lime-400);text-decoration:none}
+footer a:hover{color:var(--teal-400)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:0}
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  nav .nav-links{display:none}
+  .cv-lab,.chaos-lab,.role-lab{grid-template-columns:1fr}
+  .dora-nums{grid-template-columns:1fr 1fr}
+  .dora-sliders{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="nav-logo">L</div>
+    SRE Lab
+  </a>
+  <ul class="nav-links">
+    <li><a href="#lab1">CV Live</a></li>
+    <li><a href="#lab2">DORA Dashboard</a></li>
+    <li><a href="#lab3">Chaos K8s</a></li>
+    <li><a href="#lab4">Role Builder</a></li>
+    <li><a href="#lab5">Agent Chat</a></li>
+    <li><a href="index.html" class="related-blue">← Harness</a></li>
+    <li><a href="mcp-skills-roles.html" class="related-purple">Agents</a></li>
+  </ul>
+  <div class="nav-badge">🧪 Lab</div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Simuladores interativos ao vivo</div>
+  <h1 class="hero-title">
+    <span class="accent-lime">SRE Lab</span><br>
+    Aprenda experimentando
+  </h1>
+  <p class="hero-sub">Cinco simuladores interativos que rodam direto no navegador. Sem instalação. Sem cadastro. Experimente CV, DORA, Chaos Engineering, Role Design e Agentes de IA em tempo real.</p>
+  <div class="lab-menu">
+    <a href="#lab1">🔬 01 · Continuous Verification</a>
+    <a href="#lab2">📊 02 · DORA Dashboard</a>
+    <a href="#lab3">⚡ 03 · Kubernetes Chaos</a>
+    <a href="#lab4">🛡️ 04 · Role Builder</a>
+    <a href="#lab5">🤖 05 · Agent Playground</a>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ============================================================
+     LAB 1 — CONTINUOUS VERIFICATION
+     ============================================================ -->
+<section id="lab1" class="fade-up">
+  <div class="lab-header">
+    <span class="lab-num">LAB 01</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">/ continuous verification</span>
+  </div>
+  <h2 class="section-title">CV em tempo real com ML</h2>
+  <p class="section-sub">Dispare um deploy e observe o algoritmo de ML monitorar métricas reais. Escolha o tipo de deploy — saudável ou com bug — e veja o rollback automático em ação.</p>
+
+  <div class="lab-card">
+    <div class="controls">
+      <button class="btn btn-primary" onclick="cvDeploy('healthy')">▶ Deploy saudável</button>
+      <button class="btn btn-warn" onclick="cvDeploy('mild')">⚠ Deploy com bug leve</button>
+      <button class="btn btn-danger" onclick="cvDeploy('severe')">✗ Deploy com bug crítico</button>
+      <button class="btn btn-secondary" onclick="cvReset()">↺ Resetar</button>
+    </div>
+
+    <div class="cv-lab">
+      <div class="cv-canvas-wrap">
+        <div class="cv-canvas-title">
+          <span>◈ Métricas em tempo real · window 30s</span>
+          <span class="cv-status cv-status-idle" id="cv-status">idle · aguardando deploy</span>
+        </div>
+        <canvas id="cv-canvas" width="700" height="280"></canvas>
+        <div class="cv-legend">
+          <div class="cv-legend-item"><div class="cv-legend-dot" style="background:var(--blue-400)"></div>Latência p99 (ms)</div>
+          <div class="cv-legend-item"><div class="cv-legend-dot" style="background:var(--coral-400)"></div>Error rate (%)</div>
+          <div class="cv-legend-item"><div class="cv-legend-dot" style="background:var(--lime-400)"></div>Throughput (req/s)</div>
+          <div class="cv-legend-item"><div class="cv-legend-dot" style="background:var(--amber-400);border-radius:50%"></div>Baseline</div>
+        </div>
+      </div>
+
+      <div class="cv-side">
+        <div class="cv-metric-box">
+          <div class="cv-metric-label">Latência p99</div>
+          <div class="cv-metric-val" id="cv-lat">—</div>
+          <div class="cv-metric-baseline">baseline: 145ms</div>
+        </div>
+        <div class="cv-metric-box">
+          <div class="cv-metric-label">Error rate</div>
+          <div class="cv-metric-val" id="cv-err">—</div>
+          <div class="cv-metric-baseline">baseline: 0.03%</div>
+        </div>
+        <div class="cv-metric-box">
+          <div class="cv-metric-label">Throughput</div>
+          <div class="cv-metric-val" id="cv-thr">—</div>
+          <div class="cv-metric-baseline">baseline: 850 req/s</div>
+        </div>
+        <div class="cv-log" id="cv-log">
+          <span class="cv-log-line cv-l-info">▸ CV pronto. Selecione um tipo de deploy acima.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============================================================
+     LAB 2 — DORA DASHBOARD
+     ============================================================ -->
+<section id="lab2" class="fade-up">
+  <div class="lab-header">
+    <span class="lab-num">LAB 02</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">/ dora metrics dashboard</span>
+  </div>
+  <h2 class="section-title">DORA Metrics ao vivo</h2>
+  <p class="section-sub">Ajuste os sliders e veja as 4 métricas DORA sendo recalculadas em tempo real. A timeline mostra deploys chegando dinamicamente com sucesso ou rollback.</p>
+
+  <div class="lab-card">
+    <div class="dora-dash">
+      <div class="dora-nums">
+        <div class="dora-num-card dnc-1">
+          <div class="dora-num-label">Deployment Frequency</div>
+          <div class="dora-num-val" id="dora-df" style="color:var(--blue-400)">—</div>
+          <div class="dora-num-unit">deploys/dia</div>
+          <div class="dora-num-tier" id="dora-df-tier">—</div>
+        </div>
+        <div class="dora-num-card dnc-2">
+          <div class="dora-num-label">Lead Time</div>
+          <div class="dora-num-val" id="dora-lt" style="color:var(--purple-400)">—</div>
+          <div class="dora-num-unit">minutos (commit→prod)</div>
+          <div class="dora-num-tier" id="dora-lt-tier">—</div>
+        </div>
+        <div class="dora-num-card dnc-3">
+          <div class="dora-num-label">MTTR</div>
+          <div class="dora-num-val" id="dora-mttr" style="color:var(--teal-500)">—</div>
+          <div class="dora-num-unit">minutos</div>
+          <div class="dora-num-tier" id="dora-mttr-tier">—</div>
+        </div>
+        <div class="dora-num-card dnc-4">
+          <div class="dora-num-label">Change Failure Rate</div>
+          <div class="dora-num-val" id="dora-cfr" style="color:var(--amber-400)">—</div>
+          <div class="dora-num-unit">% deploys com rollback</div>
+          <div class="dora-num-tier" id="dora-cfr-tier">—</div>
+        </div>
+      </div>
+
+      <div class="dora-timeline-wrap">
+        <div class="dora-timeline-title">
+          <span>◈ Timeline de deploys · últimos 30 eventos</span>
+          <span id="dora-counter">0 deploys · 0 rollbacks</span>
+        </div>
+        <canvas id="dora-timeline" width="1000" height="120"></canvas>
+      </div>
+
+      <div class="dora-sliders">
+        <div class="slider-field">
+          <label>Frequência de deploy (/dia)</label>
+          <input type="range" min="1" max="30" value="8" id="dora-freq" oninput="doraUpdate()">
+          <div class="val" id="dora-freq-val">8 /dia</div>
+        </div>
+        <div class="slider-field">
+          <label>Taxa de rollback (%)</label>
+          <input type="range" min="0" max="60" value="5" id="dora-rate" oninput="doraUpdate()">
+          <div class="val" id="dora-rate-val">5%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============================================================
+     LAB 3 — KUBERNETES CHAOS
+     ============================================================ -->
+<section id="lab3" class="fade-up">
+  <div class="lab-header">
+    <span class="lab-num">LAB 03</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">/ chaos engineering</span>
+  </div>
+  <h2 class="section-title">Kubernetes Chaos Simulator</h2>
+  <p class="section-sub">Mate pods manualmente ou ative o Chaos Monkey para matar aleatoriamente. Veja o Kubernetes escalar novos pods e observe a disponibilidade do serviço em tempo real.</p>
+
+  <div class="lab-card">
+    <div class="controls">
+      <button class="btn btn-danger" onclick="killRandomPod()">⚡ Matar pod aleatório</button>
+      <button class="btn btn-warn" id="chaosBtn" onclick="toggleChaos()">🐒 Iniciar Chaos Monkey</button>
+      <button class="btn btn-primary" onclick="resetChaos()">↺ Resetar cluster</button>
+    </div>
+
+    <div class="chaos-lab">
+      <div class="chaos-cluster">
+        <div class="chaos-cluster-header">
+          <div class="cluster-name">cluster · <strong>prod-itau-k8s-01</strong> · deployment: <strong id="ck-name">payment-service</strong></div>
+          <div class="availability">
+            <span class="avail-label">availability:</span>
+            <span class="avail-val" id="avail">100%</span>
+          </div>
+        </div>
+        <div class="pod-grid" id="pod-grid"></div>
+      </div>
+
+      <div class="chaos-side">
+        <div class="chaos-metric">
+          <div class="chaos-metric-label">Pods desejados</div>
+          <div class="chaos-metric-val" style="color:var(--blue-400)" id="ch-desired">6</div>
+        </div>
+        <div class="chaos-metric">
+          <div class="chaos-metric-label">Pods rodando</div>
+          <div class="chaos-metric-val" style="color:var(--lime-400)" id="ch-running">6</div>
+        </div>
+        <div class="chaos-metric">
+          <div class="chaos-metric-label">Kills totais</div>
+          <div class="chaos-metric-val" style="color:var(--coral-400)" id="ch-kills">0</div>
+        </div>
+        <div class="replicas-control">
+          <div class="chaos-metric-label" style="margin-bottom:6px">Réplicas (spec.replicas)</div>
+          <input type="range" min="1" max="9" value="6" id="replicas" oninput="setReplicas()" style="width:100%;accent-color:var(--lime-400)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--lime-400);margin-top:4px" id="replicas-val">6 réplicas</div>
+        </div>
+        <div class="chaos-log" id="chaos-log">
+          <span class="cv-log-line cv-l-info">▸ Cluster estável · 6/6 pods running</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============================================================
+     LAB 4 — ROLE BUILDER
+     ============================================================ -->
+<section id="lab4" class="fade-up">
+  <div class="lab-header">
+    <span class="lab-num">LAB 04</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">/ role designer</span>
+  </div>
+  <h2 class="section-title">Role Builder — desenhe permissões</h2>
+  <p class="section-sub">Configure uma Role de agente marcando permissões e ambiente. O YAML é gerado ao vivo e um score de segurança avalia sua configuração baseado em least-privilege.</p>
+
+  <div class="lab-card">
+    <div class="role-lab">
+      <div class="role-builder">
+        <div class="role-section">
+          <div class="role-section-title">1 · Nome da Role</div>
+          <input type="text" id="role-name" value="prod-analyst" oninput="renderRole()" style="width:100%;background:var(--navy-900);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--lime-400);outline:none">
+        </div>
+        <div class="role-section">
+          <div class="role-section-title">2 · Ambiente alvo</div>
+          <div class="env-toggle">
+            <button class="env-btn" data-env="development" onclick="setEnv('development')">development</button>
+            <button class="env-btn" data-env="homolog" onclick="setEnv('homolog')">homolog</button>
+            <button class="env-btn active" data-env="production" onclick="setEnv('production')">production</button>
+          </div>
+        </div>
+        <div class="role-section">
+          <div class="role-section-title">3 · MCP Servers permitidos</div>
+          <div class="perm-list" id="mcp-list">
+            <label class="perm-item"><input type="checkbox" data-type="mcp" value="prometheus" checked onchange="renderRole()"><span class="perm-label">Prometheus</span><span class="perm-tag">read-only</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="mcp" value="datadog" checked onchange="renderRole()"><span class="perm-label">Datadog</span><span class="perm-tag">read-only</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="mcp" value="splunk" checked onchange="renderRole()"><span class="perm-label">Splunk</span><span class="perm-tag">read-only</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="mcp" value="kubernetes" checked onchange="renderRole()"><span class="perm-label">Kubernetes</span><span class="perm-tag warn">read + exec</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="mcp" value="harness" onchange="renderRole()"><span class="perm-label">Harness API</span><span class="perm-tag danger">write</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="mcp" value="vault" onchange="renderRole()"><span class="perm-label">Vault</span><span class="perm-tag danger">secrets</span></label>
+          </div>
+        </div>
+        <div class="role-section">
+          <div class="role-section-title">4 · Skills disponíveis</div>
+          <div class="perm-list">
+            <label class="perm-item"><input type="checkbox" data-type="skill" value="itau-incident-triage" checked onchange="renderRole()"><span class="perm-label">itau-incident-triage</span><span class="perm-tag">safe</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="skill" value="rca-5-whys" checked onchange="renderRole()"><span class="perm-label">rca-5-whys</span><span class="perm-tag">safe</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="skill" value="postmortem-writer" checked onchange="renderRole()"><span class="perm-label">postmortem-writer</span><span class="perm-tag">safe</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="skill" value="runbook-executor" onchange="renderRole()"><span class="perm-label">runbook-executor</span><span class="perm-tag warn">exec</span></label>
+            <label class="perm-item"><input type="checkbox" data-type="skill" value="auto-rollback" onchange="renderRole()"><span class="perm-label">auto-rollback</span><span class="perm-tag danger">critical</span></label>
+          </div>
+        </div>
+        <div class="role-section">
+          <div class="role-section-title">5 · Aprovação humana</div>
+          <div class="perm-list">
+            <label class="perm-item"><input type="checkbox" id="require-approval" checked onchange="renderRole()"><span class="perm-label">Exigir aprovação humana para ações mutáveis</span><span class="perm-tag">rec</span></label>
+            <label class="perm-item"><input type="checkbox" id="audit-log" checked onchange="renderRole()"><span class="perm-label">Audit log mandatório</span><span class="perm-tag">rec</span></label>
+            <label class="perm-item"><input type="checkbox" id="block-pii" checked onchange="renderRole()"><span class="perm-label">Bloquear acesso a dados PII</span><span class="perm-tag">rec</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="role-output">
+        <div class="security-score">
+          <div class="score-header">
+            <span class="score-label">Security Score (least-privilege)</span>
+            <span class="score-val" id="score-val">—</span>
+          </div>
+          <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+          <div class="score-msg" id="score-msg">Configure sua role à esquerda</div>
+        </div>
+        <div class="yaml-header">
+          <span id="yaml-filename">roles/prod-analyst.yaml</span>
+          <span>YAML</span>
+        </div>
+        <pre class="yaml-output" id="yaml-out"></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============================================================
+     LAB 5 — AGENT CHAT
+     ============================================================ -->
+<section id="lab5" class="fade-up">
+  <div class="lab-header">
+    <span class="lab-num">LAB 05</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">/ agent playground</span>
+  </div>
+  <h2 class="section-title">Agent Playground — MCP + Skills + Roles em ação</h2>
+  <p class="section-sub">Converse com um agente de SRE simulado. Cada resposta mostra qual MCP, Skill e Role está sendo usada — exatamente como funcionaria em produção.</p>
+
+  <div class="lab-card">
+    <div class="agent-chat">
+      <div class="chat-header">
+        <div class="chat-title">
+          <div class="chat-avatar">A</div>
+          Agent · SRE Copilot
+        </div>
+        <div class="chat-status">online · prod-analyst</div>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="msg msg-agent">
+          Olá! Sou o SRE Copilot do TCS/Itaú. Posso ajudar com triagem de incidentes, análise de deploys, RCAs e postmortems.
+          <div class="msg-meta">
+            <span class="meta-tag mt-role">🛡 role: prod-analyst</span>
+            <span class="meta-tag mt-skill">🎓 skills: 4 loaded</span>
+            <span class="meta-tag mt-mcp">🔌 mcp: 4 servers</span>
+          </div>
+        </div>
+        <div class="msg msg-agent">
+          Escolhe uma das sugestões abaixo para começar 👇
+        </div>
+      </div>
+      <div class="chat-input">
+        <div class="chat-suggestions" id="chat-sug">
+          <button class="chat-sug" onclick="askAgent('triage')">🚨 Triagem: payment-service caiu</button>
+          <button class="chat-sug" onclick="askAgent('deploy')">📦 Como foi o último deploy?</button>
+          <button class="chat-sug" onclick="askAgent('rca')">🔍 Gerar RCA do incidente</button>
+          <button class="chat-sug" onclick="askAgent('postmortem')">📝 Escrever postmortem</button>
+          <button class="chat-sug" onclick="askAgent('rollback')">⚠ Fazer rollback em prod</button>
+          <button class="chat-sug" onclick="askAgent('slo')">📊 Status dos SLOs</button>
+          <button class="chat-sug" onclick="resetChat()">↺ Resetar chat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>SRE Lab — Simuladores interativos</span> · TCS × Itaú · Complementa <a href="index.html">Harness</a> e <a href="mcp-skills-roles.html">AI Agents</a>
+</footer>
+
+<script>
+// ---- FADE IN ----
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)} });
+},{threshold:0.05});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+
+// ============================================================
+// LAB 1 — CONTINUOUS VERIFICATION (Canvas real-time chart)
+// ============================================================
+const cvCanvas = document.getElementById('cv-canvas');
+const cvCtx = cvCanvas.getContext('2d');
+let cvData = { lat: [], err: [], thr: [] };
+let cvRunning = false;
+let cvT = 0;
+let cvMode = null;
+let cvDeployT = -1;
+let cvAnomalyT = -1;
+let cvRollbackT = -1;
+let cvRAF;
+
+function cvResize(){
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cvCanvas.getBoundingClientRect();
+  cvCanvas.width = rect.width * dpr;
+  cvCanvas.height = rect.height * dpr;
+  cvCtx.scale(dpr, dpr);
+}
+cvResize();
+window.addEventListener('resize', () => { cvResize(); cvDraw(); });
+
+function cvNoise(base, amp){ return base + (Math.random() - 0.5) * amp; }
+
+function cvGenPoint(){
+  const baseline = { lat: 145, err: 0.03, thr: 850 };
+  let lat, err, thr;
+  const since = cvT - cvDeployT;
+  if(cvDeployT < 0 || since < 0){
+    lat = cvNoise(baseline.lat, 8);
+    err = cvNoise(baseline.err, 0.02);
+    thr = cvNoise(baseline.thr, 20);
+  } else if(cvMode === 'healthy'){
+    lat = cvNoise(baseline.lat + 5, 8);
+    err = cvNoise(baseline.err, 0.02);
+    thr = cvNoise(baseline.thr, 20);
+  } else if(cvMode === 'mild'){
+    const factor = Math.min(since/10, 1);
+    lat = cvNoise(baseline.lat + 220 * factor, 20);
+    err = cvNoise(baseline.err + 0.8 * factor, 0.1);
+    thr = cvNoise(baseline.thr - 100 * factor, 25);
+  } else if(cvMode === 'severe'){
+    const factor = Math.min(since/6, 1);
+    lat = cvNoise(baseline.lat + 800 * factor, 60);
+    err = cvNoise(baseline.err + 4.2 * factor, 0.3);
+    thr = cvNoise(baseline.thr - 320 * factor, 40);
+  }
+  if(cvRollbackT > 0 && cvT >= cvRollbackT){
+    const rback = Math.min((cvT - cvRollbackT)/8, 1);
+    const lastAnomaly = { lat: cvData.lat[cvData.lat.length-1]?.v || lat, err: cvData.err[cvData.err.length-1]?.v || err, thr: cvData.thr[cvData.thr.length-1]?.v || thr };
+    lat = lastAnomaly.lat * (1 - rback) + cvNoise(baseline.lat, 8) * rback;
+    err = lastAnomaly.err * (1 - rback) + cvNoise(baseline.err, 0.02) * rback;
+    thr = lastAnomaly.thr * (1 - rback) + cvNoise(baseline.thr, 20) * rback;
+  }
+  return { lat, err, thr };
+}
+
+function cvDraw(){
+  const rect = cvCanvas.getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+  cvCtx.clearRect(0, 0, W, H);
+  cvCtx.setTransform(window.devicePixelRatio||1, 0, 0, window.devicePixelRatio||1, 0, 0);
+
+  cvCtx.strokeStyle = 'rgba(163,230,53,0.05)';
+  cvCtx.lineWidth = 0.5;
+  for(let i = 0; i < 5; i++){
+    const y = (H/4) * i;
+    cvCtx.beginPath();
+    cvCtx.moveTo(0, y);
+    cvCtx.lineTo(W, y);
+    cvCtx.stroke();
+  }
+  cvCtx.strokeStyle = 'rgba(245,158,11,0.3)';
+  cvCtx.setLineDash([3, 3]);
+  cvCtx.beginPath();
+  cvCtx.moveTo(0, H * 0.68);
+  cvCtx.lineTo(W, H * 0.68);
+  cvCtx.stroke();
+  cvCtx.setLineDash([]);
+
+  if(cvDeployT >= 0){
+    const dx = ((cvDeployT - Math.max(cvT-60, 0)) / 60) * W;
+    if(dx > 0){
+      cvCtx.strokeStyle = 'rgba(163,230,53,0.4)';
+      cvCtx.lineWidth = 1.5;
+      cvCtx.beginPath();
+      cvCtx.moveTo(dx, 0);
+      cvCtx.lineTo(dx, H);
+      cvCtx.stroke();
+      cvCtx.fillStyle = 'var(--lime-400)';
+      cvCtx.font = '10px JetBrains Mono, monospace';
+      cvCtx.fillStyle = '#a3e635';
+      cvCtx.fillText('DEPLOY', dx + 4, 12);
+    }
+  }
+  if(cvRollbackT > 0){
+    const dx = ((cvRollbackT - Math.max(cvT-60, 0)) / 60) * W;
+    if(dx > 0){
+      cvCtx.strokeStyle = 'rgba(249,112,102,0.5)';
+      cvCtx.lineWidth = 1.5;
+      cvCtx.beginPath();
+      cvCtx.moveTo(dx, 0);
+      cvCtx.lineTo(dx, H);
+      cvCtx.stroke();
+      cvCtx.fillStyle = '#f97066';
+      cvCtx.font = '10px JetBrains Mono, monospace';
+      cvCtx.fillText('ROLLBACK', dx + 4, 12);
+    }
+  }
+
+  function drawLine(data, color, min, max){
+    if(data.length < 2) return;
+    cvCtx.strokeStyle = color;
+    cvCtx.lineWidth = 1.8;
+    cvCtx.beginPath();
+    const tStart = Math.max(cvT - 60, 0);
+    data.forEach((p, i) => {
+      const x = ((p.t - tStart) / 60) * W;
+      const y = H - ((p.v - min) / (max - min)) * H;
+      if(i === 0) cvCtx.moveTo(x, y);
+      else cvCtx.lineTo(x, y);
+    });
+    cvCtx.stroke();
+  }
+
+  const filter = arr => arr.filter(p => p.t >= cvT - 60);
+  drawLine(filter(cvData.lat), '#5594ff', 0, 1200);
+  drawLine(filter(cvData.err), '#f97066', 0, 5);
+  drawLine(filter(cvData.thr), '#a3e635', 0, 1000);
+}
+
+function cvTick(){
+  if(!cvRunning) return;
+  cvT += 0.25;
+  const p = cvGenPoint();
+  cvData.lat.push({ t: cvT, v: p.lat });
+  cvData.err.push({ t: cvT, v: p.err });
+  cvData.thr.push({ t: cvT, v: p.thr });
+  cvData.lat = cvData.lat.filter(x => x.t >= cvT - 90);
+  cvData.err = cvData.err.filter(x => x.t >= cvT - 90);
+  cvData.thr = cvData.thr.filter(x => x.t >= cvT - 90);
+  document.getElementById('cv-lat').textContent = Math.round(p.lat) + 'ms';
+  document.getElementById('cv-lat').style.color = p.lat > 500 ? '#f97066' : (p.lat > 250 ? '#f59e0b' : '#a3e635');
+  document.getElementById('cv-err').textContent = p.err.toFixed(2) + '%';
+  document.getElementById('cv-err').style.color = p.err > 2 ? '#f97066' : (p.err > 0.5 ? '#f59e0b' : '#a3e635');
+  document.getElementById('cv-thr').textContent = Math.round(p.thr) + '/s';
+  document.getElementById('cv-thr').style.color = p.thr < 500 ? '#f97066' : (p.thr < 700 ? '#f59e0b' : '#a3e635');
+
+  if(cvMode && cvDeployT > 0 && cvAnomalyT < 0 && cvRollbackT < 0){
+    const since = cvT - cvDeployT;
+    if(cvMode === 'severe' && since > 3 && p.err > 1){
+      cvAnomalyT = cvT;
+      cvSetStatus('anomaly', '⚠ anomalia detectada · ML analisando');
+      cvLog('warn', '⚠ [AIDA] Anomalia detectada · error_rate=' + p.err.toFixed(2) + '% (baseline=0.03%)');
+      cvLog('warn', '⚠ [AIDA] Latência p99=' + Math.round(p.lat) + 'ms · desvio 6.9σ do baseline');
+      setTimeout(() => { if(cvMode){ cvRollbackT = cvT + 0.5; cvSetStatus('rollback', '✗ rollback iniciado'); cvLog('err', '✗ [AIDA] Iniciando rollback automático → v2.14.2');} }, 1500);
+    } else if(cvMode === 'mild' && since > 5 && p.err > 0.4){
+      cvAnomalyT = cvT;
+      cvSetStatus('anomaly', '⚠ desvio detectado');
+      cvLog('warn', '⚠ [AIDA] Desvio moderado · monitorando por mais 5s');
+      setTimeout(() => { if(cvMode){ cvRollbackT = cvT + 0.5; cvSetStatus('rollback', '✗ rollback iniciado'); cvLog('err', '✗ [AIDA] Padrão confirmado · rollback automático');} }, 3500);
+    } else if(cvMode === 'healthy' && since > 12){
+      cvSetStatus('healthy', '✓ deploy saudável · promovendo 100%');
+      cvLog('ok', '✓ [AIDA] Métricas dentro do baseline · deploy promovido');
+      cvMode = null;
+    }
+  }
+  if(cvRollbackT > 0 && cvT - cvRollbackT > 12){
+    cvSetStatus('healthy', '✓ serviço restaurado');
+    cvLog('ok', '✓ [AIDA] Rollback concluído · serviço estável');
+    cvMode = null;
+    cvRollbackT = -2;
+  }
+  cvDraw();
+  cvRAF = requestAnimationFrame(cvTick);
+}
+
+function cvSetStatus(cls, txt){
+  const el = document.getElementById('cv-status');
+  el.className = 'cv-status cv-status-' + cls;
+  el.textContent = txt;
+}
+
+function cvLog(type, msg){
+  const log = document.getElementById('cv-log');
+  const cls = { info: 'cv-l-info', ok: 'cv-l-ok', warn: 'cv-l-warn', err: 'cv-l-err' }[type];
+  log.innerHTML += '<span class="cv-log-line ' + cls + '">' + msg + '</span>';
+  log.scrollTop = log.scrollHeight;
+}
+
+function cvDeploy(mode){
+  if(!cvRunning){
+    cvRunning = true;
+    cvT = 5;
+    for(let i = 0; i < 20; i++){
+      cvT += 0.25;
+      const p = cvGenPoint();
+      cvData.lat.push({ t: cvT, v: p.lat });
+      cvData.err.push({ t: cvT, v: p.err });
+      cvData.thr.push({ t: cvT, v: p.thr });
+    }
+    cvTick();
+  }
+  cvMode = mode;
+  cvDeployT = cvT + 0.5;
+  cvAnomalyT = -1;
+  cvRollbackT = -1;
+  cvSetStatus('monitoring', '▸ deploy iniciado · CV monitorando');
+  const modes = {healthy: 'saudável', mild: 'com bug leve', severe: 'com bug crítico'};
+  cvLog('info', '▸ Deploy ' + modes[mode] + ' iniciado · CV coletando baseline');
+}
+
+function cvReset(){
+  cvRunning = false;
+  cvT = 0;
+  cvMode = null;
+  cvDeployT = -1;
+  cvAnomalyT = -1;
+  cvRollbackT = -1;
+  cvData = { lat: [], err: [], thr: [] };
+  if(cvRAF) cancelAnimationFrame(cvRAF);
+  document.getElementById('cv-lat').textContent = '—';
+  document.getElementById('cv-err').textContent = '—';
+  document.getElementById('cv-thr').textContent = '—';
+  document.getElementById('cv-lat').style.color = '';
+  document.getElementById('cv-err').style.color = '';
+  document.getElementById('cv-thr').style.color = '';
+  document.getElementById('cv-log').innerHTML = '<span class="cv-log-line cv-l-info">▸ CV pronto. Selecione um tipo de deploy acima.</span>';
+  cvSetStatus('idle', 'idle · aguardando deploy');
+  cvDraw();
+}
+cvDraw();
+
+// ============================================================
+// LAB 2 — DORA DASHBOARD
+// ============================================================
+const dtCanvas = document.getElementById('dora-timeline');
+const dtCtx = dtCanvas.getContext('2d');
+let doraDeploys = [];
+let doraStats = { total: 0, rollbacks: 0 };
+let doraRAF;
+
+function dtResize(){
+  const dpr = window.devicePixelRatio || 1;
+  const rect = dtCanvas.getBoundingClientRect();
+  dtCanvas.width = rect.width * dpr;
+  dtCanvas.height = rect.height * dpr;
+  dtCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+dtResize();
+window.addEventListener('resize', dtResize);
+
+function doraUpdate(){
+  const freq = parseInt(document.getElementById('dora-freq').value);
+  const rate = parseInt(document.getElementById('dora-rate').value);
+  document.getElementById('dora-freq-val').textContent = freq + ' /dia';
+  document.getElementById('dora-rate-val').textContent = rate + '%';
+
+  document.getElementById('dora-df').textContent = freq;
+  const dfTier = freq >= 10 ? 'elite' : freq >= 4 ? 'high' : freq >= 2 ? 'med' : 'low';
+  const dfLabels = { elite: 'Elite', high: 'High', med: 'Medium', low: 'Low' };
+  const tE = document.getElementById('dora-df-tier');
+  tE.className = 'dora-num-tier tier-' + dfTier;
+  tE.textContent = dfLabels[dfTier];
+
+  const lt = Math.max(8, Math.round(120 - freq * 3 - (60 - rate) * 0.4));
+  document.getElementById('dora-lt').textContent = lt;
+  const ltTier = lt < 60 ? 'elite' : lt < 240 ? 'high' : lt < 1440 ? 'med' : 'low';
+  const ltE = document.getElementById('dora-lt-tier');
+  ltE.className = 'dora-num-tier tier-' + ltTier;
+  ltE.textContent = dfLabels[ltTier];
+
+  const mttr = Math.round(5 + rate * 0.9);
+  document.getElementById('dora-mttr').textContent = mttr;
+  const mttrTier = mttr < 60 ? 'elite' : mttr < 1440 ? 'high' : mttr < 10080 ? 'med' : 'low';
+  const mttrE = document.getElementById('dora-mttr-tier');
+  mttrE.className = 'dora-num-tier tier-' + mttrTier;
+  mttrE.textContent = dfLabels[mttrTier];
+
+  document.getElementById('dora-cfr').textContent = rate + '%';
+  const cfrTier = rate <= 5 ? 'elite' : rate <= 15 ? 'high' : rate <= 45 ? 'med' : 'low';
+  const cfrE = document.getElementById('dora-cfr-tier');
+  cfrE.className = 'dora-num-tier tier-' + cfrTier;
+  cfrE.textContent = dfLabels[cfrTier];
+}
+
+function doraTick(){
+  const freq = parseInt(document.getElementById('dora-freq').value);
+  const rate = parseInt(document.getElementById('dora-rate').value);
+  const interval = 3000 / freq;
+  const now = Date.now();
+  if(!doraTick.last || now - doraTick.last > interval){
+    doraTick.last = now;
+    const rb = Math.random() * 100 < rate;
+    doraDeploys.push({ t: now, rb });
+    doraStats.total++;
+    if(rb) doraStats.rollbacks++;
+    if(doraDeploys.length > 30) doraDeploys.shift();
+    document.getElementById('dora-counter').textContent = doraStats.total + ' deploys · ' + doraStats.rollbacks + ' rollbacks';
+  }
+  doraDrawTimeline();
+  doraRAF = requestAnimationFrame(doraTick);
+}
+
+function doraDrawTimeline(){
+  const rect = dtCanvas.getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+  dtCtx.clearRect(0, 0, W, H);
+
+  dtCtx.strokeStyle = 'rgba(163,230,53,0.15)';
+  dtCtx.lineWidth = 1;
+  dtCtx.beginPath();
+  dtCtx.moveTo(0, H/2);
+  dtCtx.lineTo(W, H/2);
+  dtCtx.stroke();
+
+  const now = Date.now();
+  doraDeploys.forEach((d, i) => {
+    const age = (now - d.t) / 15000;
+    if(age > 1) return;
+    const x = W - age * W;
+    const r = d.rb ? 8 : 6;
+    dtCtx.beginPath();
+    dtCtx.arc(x, H/2, r, 0, Math.PI * 2);
+    if(d.rb){
+      dtCtx.fillStyle = 'rgba(249,112,102,0.9)';
+      dtCtx.fill();
+      dtCtx.strokeStyle = 'rgba(249,112,102,0.3)';
+      dtCtx.lineWidth = 2;
+      dtCtx.stroke();
+    } else {
+      dtCtx.fillStyle = 'rgba(163,230,53,0.9)';
+      dtCtx.fill();
+      dtCtx.strokeStyle = 'rgba(163,230,53,0.3)';
+      dtCtx.lineWidth = 2;
+      dtCtx.stroke();
+    }
+    dtCtx.fillStyle = d.rb ? '#f97066' : '#a3e635';
+    dtCtx.font = '9px JetBrains Mono, monospace';
+    dtCtx.textAlign = 'center';
+    dtCtx.fillText(d.rb ? '✗' : '✓', x, H/2 + 22);
+  });
+
+  dtCtx.fillStyle = 'rgba(143,163,190,0.6)';
+  dtCtx.font = '9px JetBrains Mono, monospace';
+  dtCtx.textAlign = 'right';
+  dtCtx.fillText('agora →', W - 4, H - 4);
+  dtCtx.textAlign = 'left';
+  dtCtx.fillText('15s atrás', 4, H - 4);
+}
+doraUpdate();
+doraTick();
+
+// ============================================================
+// LAB 3 — KUBERNETES CHAOS
+// ============================================================
+let podState = [];
+let chaosMonkey = null;
+let chaosKills = 0;
+const podNames = ['payment-a1','payment-b2','payment-c3','payment-d4','payment-e5','payment-f6','payment-g7','payment-h8','payment-i9'];
+
+function initChaos(){
+  const desired = parseInt(document.getElementById('replicas').value);
+  podState = [];
+  for(let i = 0; i < desired; i++){
+    podState.push({ name: podNames[i], status: 'running', startAt: 0 });
+  }
+  renderPods();
+  updateChaosMetrics();
+}
+
+function renderPods(){
+  const grid = document.getElementById('pod-grid');
+  grid.innerHTML = '';
+  podState.forEach((pod, i) => {
+    const el = document.createElement('div');
+    el.className = 'pod ' + pod.status;
+    el.onclick = () => killPod(i);
+    el.innerHTML = '<div class="pod-status"></div><div class="pod-icon">📦</div><div class="pod-name">' + pod.name + '</div>';
+    grid.appendChild(el);
+  });
+}
+
+function killPod(idx){
+  if(podState[idx].status !== 'running') return;
+  podState[idx].status = 'dead';
+  chaosKills++;
+  chaosLog('err', '✗ pod ' + podState[idx].name + ' terminado');
+  renderPods();
+  updateChaosMetrics();
+  setTimeout(() => {
+    const desired = parseInt(document.getElementById('replicas').value);
+    const alive = podState.filter(p => p.status !== 'dead').length;
+    if(alive < desired){
+      const deadIdx = podState.findIndex(p => p.status === 'dead');
+      if(deadIdx >= 0){
+        podState[deadIdx].status = 'starting';
+        podState[deadIdx].name = 'payment-' + Math.random().toString(36).substr(2, 4);
+        chaosLog('warn', '⟳ K8s: novo pod iniciando · ' + podState[deadIdx].name);
+        renderPods();
+        setTimeout(() => {
+          podState[deadIdx].status = 'running';
+          chaosLog('ok', '✓ pod ' + podState[deadIdx].name + ' running');
+          renderPods();
+          updateChaosMetrics();
+        }, 2000);
+      }
+    }
+  }, 800);
+}
+
+function killRandomPod(){
+  const running = podState.map((p,i) => p.status === 'running' ? i : -1).filter(i => i >= 0);
+  if(running.length === 0){ chaosLog('warn', '⚠ nenhum pod running para matar'); return; }
+  const idx = running[Math.floor(Math.random() * running.length)];
+  killPod(idx);
+}
+
+function toggleChaos(){
+  const btn = document.getElementById('chaosBtn');
+  if(chaosMonkey){
+    clearInterval(chaosMonkey);
+    chaosMonkey = null;
+    btn.textContent = '🐒 Iniciar Chaos Monkey';
+    btn.classList.remove('btn-active');
+    chaosLog('info', '▸ Chaos Monkey parado');
+  } else {
+    chaosMonkey = setInterval(killRandomPod, 3500);
+    btn.textContent = '🐒 Parar Chaos Monkey';
+    btn.classList.add('btn-active');
+    chaosLog('warn', '🐒 Chaos Monkey ativo · matando a cada 3.5s');
+  }
+}
+
+function setReplicas(){
+  const desired = parseInt(document.getElementById('replicas').value);
+  document.getElementById('replicas-val').textContent = desired + ' réplicas';
+  document.getElementById('ch-desired').textContent = desired;
+  const cur = podState.length;
+  if(desired > cur){
+    for(let i = cur; i < desired; i++){
+      podState.push({ name: podNames[i] || 'payment-' + i, status: 'starting' });
+    }
+    renderPods();
+    setTimeout(() => {
+      podState.forEach(p => { if(p.status === 'starting') p.status = 'running'; });
+      renderPods();
+      updateChaosMetrics();
+    }, 1500);
+  } else if(desired < cur){
+    podState = podState.slice(0, desired);
+    renderPods();
+    updateChaosMetrics();
+  }
+}
+
+function updateChaosMetrics(){
+  const running = podState.filter(p => p.status === 'running').length;
+  const desired = podState.length;
+  document.getElementById('ch-running').textContent = running;
+  document.getElementById('ch-kills').textContent = chaosKills;
+  const avail = desired > 0 ? Math.round((running / desired) * 100) : 0;
+  const av = document.getElementById('avail');
+  av.textContent = avail + '%';
+  av.style.color = avail === 100 ? 'var(--lime-400)' : (avail >= 50 ? 'var(--amber-400)' : 'var(--coral-400)');
+}
+
+function chaosLog(type, msg){
+  const log = document.getElementById('chaos-log');
+  const cls = { info: 'cv-l-info', ok: 'cv-l-ok', warn: 'cv-l-warn', err: 'cv-l-err' }[type];
+  log.innerHTML += '<span class="cv-log-line ' + cls + '">' + msg + '</span>';
+  log.scrollTop = log.scrollHeight;
+  const lines = log.querySelectorAll('.cv-log-line');
+  if(lines.length > 15) lines[0].remove();
+}
+
+function resetChaos(){
+  if(chaosMonkey){ toggleChaos(); }
+  chaosKills = 0;
+  initChaos();
+  document.getElementById('chaos-log').innerHTML = '<span class="cv-log-line cv-l-info">▸ Cluster resetado · pods running</span>';
+}
+
+initChaos();
+
+// ============================================================
+// LAB 4 — ROLE BUILDER
+// ============================================================
+let currentEnv = 'production';
+
+function setEnv(env){
+  currentEnv = env;
+  document.querySelectorAll('.env-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.env === env);
+  });
+  renderRole();
+}
+
+function renderRole(){
+  const name = document.getElementById('role-name').value || 'unnamed-role';
+  const mcps = [...document.querySelectorAll('input[data-type=mcp]:checked')].map(i => i.value);
+  const skills = [...document.querySelectorAll('input[data-type=skill]:checked')].map(i => i.value);
+  const requireApproval = document.getElementById('require-approval').checked;
+  const auditLog = document.getElementById('audit-log').checked;
+  const blockPii = document.getElementById('block-pii').checked;
+
+  document.getElementById('yaml-filename').textContent = 'roles/' + name + '.yaml';
+
+  const yaml = `<span class="k">apiVersion</span>: <span class="s">agent.itau.corp/v1</span>
+<span class="k">kind</span>: <span class="s">AgentRole</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="s">${name}</span>
+  <span class="k">annotations</span>:
+    <span class="k">tcs.itau.corp/compliance</span>: <span class="s">bacen-lgpd</span>
+<span class="k">spec</span>:
+  <span class="k">environment</span>: <span class="s">${currentEnv}</span>
+  <span class="k">mcpServers</span>:
+${mcps.length ? mcps.map(m => '    - <span class="s">' + m + '</span>').join('\n') : '    <span class="c"># nenhum servidor MCP habilitado</span>'}
+  <span class="k">allowedSkills</span>:
+${skills.length ? skills.map(s => '    - <span class="s">' + s + '</span>').join('\n') : '    <span class="c"># nenhuma skill habilitada</span>'}
+  <span class="k">policy</span>:
+    <span class="k">requireApproval</span>: <span class="s">${requireApproval}</span>
+    <span class="k">auditLog</span>: <span class="s">${auditLog ? 'mandatory' : 'optional'}</span>
+    <span class="k">blockPII</span>: <span class="s">${blockPii}</span>
+    <span class="k">maxActionsPerHour</span>: <span class="s">${currentEnv === 'production' ? 20 : 100}</span>`;
+  document.getElementById('yaml-out').innerHTML = yaml;
+
+  let score = 100;
+  const issues = [];
+  const hasDanger = mcps.includes('vault') || mcps.includes('harness');
+  const hasCritical = skills.includes('auto-rollback');
+
+  if(currentEnv === 'production' && !requireApproval){ score -= 30; issues.push('prod sem aprovação humana'); }
+  if(!auditLog){ score -= 20; issues.push('sem audit log'); }
+  if(!blockPii){ score -= 15; issues.push('sem bloqueio de PII'); }
+  if(currentEnv === 'production' && hasDanger && !requireApproval){ score -= 20; issues.push('MCP crítico em prod sem approval'); }
+  if(currentEnv === 'production' && hasCritical && !requireApproval){ score -= 25; issues.push('auto-rollback em prod sem approval'); }
+  if(mcps.length > 4){ score -= 5; issues.push('muitos servidores MCP (over-privilege)'); }
+  if(skills.length === 0){ score -= 40; issues.push('nenhuma skill habilitada'); }
+  score = Math.max(0, Math.min(100, score));
+
+  const val = document.getElementById('score-val');
+  val.textContent = score;
+  const fill = document.getElementById('score-fill');
+  fill.style.width = score + '%';
+  let color, msg;
+  if(score >= 85){ color = 'var(--lime-400)'; msg = 'Configuração least-privilege excelente · pronto para prod'; }
+  else if(score >= 65){ color = 'var(--blue-400)'; msg = 'Boa configuração · pequenos ajustes recomendados: ' + issues.slice(0,1).join(', '); }
+  else if(score >= 40){ color = 'var(--amber-400)'; msg = 'Configuração arriscada · corrigir: ' + issues.slice(0,2).join(', '); }
+  else { color = 'var(--coral-400)'; msg = 'Configuração perigosa · não usar em prod: ' + issues.slice(0,3).join(', '); }
+  val.style.color = color;
+  fill.style.background = color;
+  document.getElementById('score-msg').textContent = msg;
+}
+renderRole();
+
+// ============================================================
+// LAB 5 — AGENT CHAT
+// ============================================================
+const chatFlows = {
+  triage: {
+    user: '🚨 payment-service caiu, faz triagem',
+    steps: [
+      { thinking: 1200 },
+      { msg: 'Entendido. Iniciando triagem do payment-service com skill <code>itau-incident-triage</code>.', meta: { role: 'prod-analyst', skill: 'itau-incident-triage' } },
+      { thinking: 900 },
+      { msg: '📊 <b>Datadog</b> · Latência p99 = 4.2s (baseline 145ms) · Error rate = 3.8% (baseline 0.03%)', meta: { mcp: 'datadog' } },
+      { thinking: 800 },
+      { msg: '📜 <b>Splunk</b> · 847 exceptions em 15min · padrão: <code>NullPointerException em processPayment() linha 247</code>', meta: { mcp: 'splunk' } },
+      { thinking: 700 },
+      { msg: '🚀 <b>Harness</b> · Último deploy foi <code>v2.14.3</code> há 14 minutos — forte correlação temporal.', meta: { mcp: 'harness' } },
+      { thinking: 900 },
+      { msg: '☸️ <b>Kubernetes</b> · 3/6 pods em CrashLoopBackOff', meta: { mcp: 'kubernetes' } },
+      { thinking: 1400 },
+      { msg: '<b>💡 Hipótese principal:</b> deploy <code>v2.14.3</code> introduziu NPE. Sugestão: <b>rollback para v2.14.2</b>. Não posso executar rollback sem aprovação humana. Digite "rollback" para próximo passo.', meta: { role: 'prod-analyst' } }
+    ]
+  },
+  deploy: {
+    user: 'Como foi o último deploy?',
+    steps: [
+      { thinking: 900 },
+      { msg: 'Consultando Harness com skill <code>deploy-status-check</code>...', meta: { role: 'prod-analyst', skill: 'deploy-status-check', mcp: 'harness' } },
+      { thinking: 1100 },
+      { msg: '🚀 <b>Último deploy · payment-service</b><br><br>• Versão: <code>v2.14.3</code><br>• Deploy iniciado: 14:18<br>• Deploy concluído: 14:22 (4min)<br>• Estratégia: canary 10% → 100%<br>• CV: ⚠ anomalia detectada às 14:32<br>• Status atual: <b style="color:var(--coral-400)">rollback necessário</b>', meta: { mcp: 'harness' } }
+    ]
+  },
+  rca: {
+    user: 'Gerar RCA do incidente',
+    steps: [
+      { thinking: 1000 },
+      { msg: 'Carregando skill <code>rca-5-whys</code>. Consultando logs e métricas...', meta: { role: 'prod-analyst', skill: 'rca-5-whys', mcp: 'splunk + datadog' } },
+      { thinking: 1400 },
+      { msg: '<b>🔍 RCA — Método 5 Porquês</b><br><br><b>1.</b> Por que o serviço caiu?<br>→ NPE em processPayment()<br><br><b>2.</b> Por que NPE?<br>→ campo <code>customer.address</code> nulo no request<br><br><b>3.</b> Por que campo nulo?<br>→ deploy v2.14.3 removeu validação de entrada<br><br><b>4.</b> Por que a validação foi removida?<br>→ PR #1847 refatorou o método sem cobertura de teste<br><br><b>5.</b> Por que sem cobertura?<br>→ regra de CI aceita 80% coverage · nova linha não estava coberta<br><br><b>Root cause:</b> gap na regra de code coverage do CI.', meta: { skill: 'rca-5-whys' } }
+    ]
+  },
+  postmortem: {
+    user: 'Escreve o postmortem',
+    steps: [
+      { thinking: 1100 },
+      { msg: 'Carregando skill <code>postmortem-writer</code> com template do Itaú...', meta: { role: 'prod-analyst', skill: 'postmortem-writer' } },
+      { thinking: 1500 },
+      { msg: '<b>📝 POSTMORTEM · payment-service · 2026-07-21</b><br><br><b>Impacto:</b> 4min12s indisponibilidade parcial (60%) · ~2.400 transações afetadas · rollback automático via Harness CV<br><br><b>Timeline:</b><br>• 14:18 — deploy v2.14.3 iniciado<br>• 14:22 — deploy 100% concluído<br>• 14:32 — CV detecta anomalia<br>• 14:36 — rollback concluído automaticamente<br><br><b>Root cause:</b> NPE em processPayment() por remoção de validação<br><br><b>Ações preventivas:</b><br>• Aumentar coverage mínimo para 90%<br>• Adicionar mutation testing<br>• Revisar PRs de refatoração com peer review obrigatório<br><br>Documento criado no Confluence · link enviado ao time.', meta: { skill: 'postmortem-writer', mcp: 'confluence' } }
+    ]
+  },
+  rollback: {
+    user: 'Faz rollback em prod',
+    steps: [
+      { thinking: 900 },
+      { msg: '⚠ Rollback em produção é ação mutável. Minha role <code>prod-analyst</code> exige aprovação humana para isso.', meta: { role: 'prod-analyst' } },
+      { thinking: 700 },
+      { msg: '📋 Sugestão preparada:<br><br>• Ação: rollback payment-service<br>• De: v2.14.3<br>• Para: v2.14.2<br>• Impacto estimado: restauração em ~2min<br>• Risco: baixo (versão anterior estável há 3 semanas)<br><br><b>Aprovação humana necessária</b> — abre o Harness ou aprova via Slack.', meta: { role: 'prod-analyst', skill: 'rollback-proposal' } }
+    ]
+  },
+  slo: {
+    user: 'Como estão os SLOs?',
+    steps: [
+      { thinking: 900 },
+      { msg: 'Consultando skill <code>slo-status-check</code>...', meta: { role: 'prod-analyst', skill: 'slo-status-check', mcp: 'datadog' } },
+      { thinking: 1200 },
+      { msg: '<b>📊 SLO Status · Últimos 30 dias</b><br><br>• <b>payment-service</b>: 99.94% (target 99.9%) ✅<br>• <b>auth-service</b>: 99.87% (target 99.9%) ⚠<br>• <b>notification-service</b>: 99.98% (target 99.5%) ✅<br>• <b>checkout-flow</b>: 99.72% (target 99.9%) ❌<br><br><b>⚠ Atenção:</b> checkout-flow abaixo do SLO. Error budget quase esgotado.', meta: { mcp: 'datadog' } }
+    ]
+  }
+};
+
+function askAgent(topic){
+  const flow = chatFlows[topic];
+  if(!flow) return;
+  document.querySelectorAll('.chat-sug').forEach(b => b.disabled = true);
+  const body = document.getElementById('chat-body');
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg msg-user';
+  userMsg.textContent = flow.user;
+  body.appendChild(userMsg);
+  body.scrollTop = body.scrollHeight;
+  let delay = 500;
+  flow.steps.forEach(step => {
+    if(step.thinking){
+      setTimeout(() => {
+        const t = document.createElement('div');
+        t.className = 'msg-thinking';
+        t.id = 'thinking-tmp';
+        body.appendChild(t);
+        body.scrollTop = body.scrollHeight;
+      }, delay);
+      delay += step.thinking;
+      setTimeout(() => {
+        const t = document.getElementById('thinking-tmp');
+        if(t) t.remove();
+      }, delay - 100);
+    } else if(step.msg){
+      setTimeout(() => {
+        const m = document.createElement('div');
+        m.className = 'msg msg-agent';
+        let html = step.msg;
+        if(step.meta){
+          html += '<div class="msg-meta">';
+          if(step.meta.role) html += '<span class="meta-tag mt-role">🛡 role: ' + step.meta.role + '</span>';
+          if(step.meta.skill) html += '<span class="meta-tag mt-skill">🎓 skill: ' + step.meta.skill + '</span>';
+          if(step.meta.mcp) html += '<span class="meta-tag mt-mcp">🔌 mcp: ' + step.meta.mcp + '</span>';
+          html += '</div>';
+        }
+        m.innerHTML = html;
+        body.appendChild(m);
+        body.scrollTop = body.scrollHeight;
+      }, delay);
+      delay += 400;
+    }
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.chat-sug').forEach(b => b.disabled = false);
+  }, delay);
+}
+
+function resetChat(){
+  document.getElementById('chat-body').innerHTML = `
+    <div class="msg msg-agent">
+      Olá! Sou o SRE Copilot do TCS/Itaú. Posso ajudar com triagem de incidentes, análise de deploys, RCAs e postmortems.
+      <div class="msg-meta">
+        <span class="meta-tag mt-role">🛡 role: prod-analyst</span>
+        <span class="meta-tag mt-skill">🎓 skills: 4 loaded</span>
+        <span class="meta-tag mt-mcp">🔌 mcp: 4 servers</span>
+      </div>
+    </div>
+  `;
+  document.querySelectorAll('.chat-sug').forEach(b => b.disabled = false);
+}
+</script>
+</body>
+</html>
