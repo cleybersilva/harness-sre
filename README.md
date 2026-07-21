@@ -38,7 +38,7 @@
 
 **Harness SRE Platform** é uma **vitrine técnica multi-página** que apresenta, de forma didática e interativa, as práticas modernas de Site Reliability Engineering aplicadas em ambiente bancário regulado — combinando a plataforma **Harness**, o protocolo **MCP (Model Context Protocol)**, o modelo de **Skills** e **Roles** de agentes de IA e um **laboratório de simuladores interativos**.
 
-O projeto foi desenvolvido no contexto profissional da atuação como **DevSecOps/SRE Engineer** na **TCS (Tata Consultancy Services)** alocado ao **Itaú Unibanco**, e serve como material didático para explicar aos pares e stakeholders como as práticas de **AIOps**, **GitOps**, **Continuous Verification** e **agentes de IA** se integram numa esteira profissional.
+O projeto foi desenvolvido no contexto profissional da atuação como **AI Scientist / SRE Engineer** na **TCS (Tata Consultancy Services)** alocado ao **Itaú Unibanco**, e serve como material didático para explicar aos pares e stakeholders como as práticas de **AIOps**, **GitOps**, **Continuous Verification** e **agentes de IA** se integram numa esteira profissional.
 
 ### 🎯 Motivação
 
@@ -455,7 +455,7 @@ Você pode usar, modificar e distribuir livremente, desde que mantida a atribui�
 
 ### **Cleyber Gomes da Silva**
 
-**DevSecOps / SRE Engineer** · TCS × Itaú Unibanco
+**AI Scientist / SRE Engineer** · TCS × Itaú Unibanco
 **Aluno de MBA em Inteligência Artificial e Big Data** · ICMC / USP
 **Doutorando em IA & Big Data** · USP · **Educação Sciences** · VCCU
 
@@ -468,7 +468,7 @@ Você pode usar, modificar e distribuir livremente, desde que mantida a atribui�
 
 ### Sobre o autor
 
-DevSecOps/SRE Engineer com experiência em ambientes bancários regulados, atualmente alocado ao **Itaú Unibanco** via **TCS (Tata Consultancy Services)**. Simultaneamente, doutorando em **Inteligência Artificial e Big Data** pela **USP** e em **Ciências da Educação** pela **VCCU (Veni Creator Christian University)**, onde também atua como professor, pesquisador e gestor do VLE (Moodle).
+AI Scientist / SRE Engineer com experiência em ambientes bancários regulados, atualmente alocado ao **Itaú Unibanco** via **TCS (Tata Consultancy Services)**. Simultaneamente, doutorando em **Inteligência Artificial e Big Data** pela **USP** e em **Ciências da Educação** pela **VCCU (Veni Creator Christian University)**, onde também atua como professor, pesquisador e gestor do VLE (Moodle).
 
 Especialista em **Cloud-Native Infrastructure**, **GitOps**, **Observability** e **AI aplicada a operações**. Idealizador de projetos que unem SRE, DevSecOps e Inteligência Artificial, com foco em **educação inclusiva** ([EduAutismo IA](https://github.com/cleybersilva/eduautismo-ia-mvp)) e **infraestrutura resiliente** (este projeto).
 
